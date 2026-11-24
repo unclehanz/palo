@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>PALO! Volleyball</title>
+<style>
+@font-face{font-family:'Bangers';src:url('lib/bangers.woff2') format('woff2');font-display:block}
+:root{--ink:#111;--paper:#f3f1ec;--red:#d62828;--green:#1f9d55;--mute:#5b5852;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#111;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+#app{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);width:min(100vw,calc(100vh * 9 / 19.5));background:#fff;overflow:hidden}
+#gl{position:absolute;left:0;top:0;width:100%;height:70%;display:block}
+#hud{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scr{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:max(24px,env(safe-area-inset-top)) 22px max(24px,env(safe-area-inset-bottom));background:var(--paper) radial-gradient(#0000001a 1.2px,transparent 1.6px) 0 0/8px 8px;text-align:center;overflow:auto}
+.scr.clear{background:rgba(243,241,236,.86)}
+.logo{font:400 clamp(72px,26vw,120px)/.85 Bangers,Impact,sans-serif;color:#111;letter-spacing:.02em;margin:0;transform:rotate(-6deg);text-shadow:5px 5px 0 var(--red);-webkit-text-stroke:2px #111}
+.logo span{color:var(--red);-webkit-text-stroke:2px #111;text-shadow:5px 5px 0 #111}
+.tagline{font:400 22px Bangers,Impact;letter-spacing:.06em;margin:0 0 8px;color:#111}
+.btn{font:400 26px Bangers,Impact,sans-serif;letter-spacing:.06em;background:#fff;color:#111;border:4px solid #111;box-shadow:6px 6px 0 #111;padding:9px 24px;min-width:230px;cursor:pointer;transform:rotate(-1deg)}
+.btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 #111}
+.btn:disabled{opacity:.4}
+.btn.main{background:#111;color:#fff;box-shadow:6px 6px 0 var(--red);font-size:34px}
+.btn small{display:block;font:500 12px/1.3 system-ui,sans-serif;letter-spacing:0;opacity:.75;margin-top:2px}
+h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
+.panel{background:#fff;border:4px solid #111;box-shadow:8px 8px 0 #111;padding:14px 16px;max-width:360px;width:100%;text-align:left}
+.panel p,.panel li{font-size:14px;line-height:1.45;margin:6px 0;color:#222}
+.panel ul{padding-left:18px;margin:4px 0}
+.panel h3{font:400 20px Bangers,Impact;letter-spacing:.08em;margin:8px 0 2px;color:var(--red)}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:2px solid #111;font:400 18px Bangers,Impact;letter-spacing:.04em;flex-wrap:wrap}
+.srow:last-child{border-bottom:0}
+.seg{display:flex;flex-wrap:wrap}.seg button{font:400 15px Bangers,Impact;background:#fff;border:3px solid #111;margin-left:-3px;padding:3px 8px;cursor:pointer;letter-spacing:.04em;color:#111}.seg button.on{background:#111;color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:340px}
+.stat{background:#fff;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:8px 4px}.stat b{display:block;font:400 30px Bangers,Impact}.stat span{font:400 13px Bangers,Impact;letter-spacing:.08em}
+.big{font:400 clamp(54px,18vw,86px)/.9 Bangers,Impact;margin:0;transform:rotate(-4deg)}
+.win{color:#111;text-shadow:5px 5px 0 var(--green)}.lose{color:#111;text-shadow:5px 5px 0 var(--red)}
+.foot{font:400 14px Bangers,Impact;letter-spacing:.1em;color:#555;margin-top:6px}
+#pauseBtn{position:absolute;z-index:4;left:12px;top:max(12px,env(safe-area-inset-top));width:40px;height:40px;border:3px solid #111;background:#fff;border-radius:50%;font:400 18px Bangers;cursor:pointer;display:none}
+.hide{display:none!important}[hidden]{display:none!important}
+.mode{display:flex;align-items:center;gap:14px;width:100%;max-width:340px;min-height:104px;background:#fff;color:#111;border:4px solid #111;box-shadow:6px 6px 0 #111;padding:10px 14px;cursor:pointer;text-align:left;position:relative;font:inherit}
+.mode:active{transform:translate(4px,4px);box-shadow:2px 2px 0 #111}
+.mode:first-of-type{background:#111;color:#fff;box-shadow:6px 6px 0 var(--red)}
+.mode .ico{flex:0 0 84px;height:84px;display:block}.mode .ico svg{width:100%;height:100%;display:block}
+.mode:first-of-type .ico svg circle:first-child{stroke:#fff}
+.mode .mtx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mode b{font:400 34px/1 Bangers,Impact,sans-serif;letter-spacing:.05em}
+.mode small{font:500 12px/1.3 system-ui,sans-serif;opacity:.75}
+.mode i{font:400 13px Bangers,Impact;letter-spacing:.1em;font-style:normal;background:var(--red);color:#fff;padding:1px 8px;align-self:flex-start;margin-top:3px}
+.mode.soon{cursor:default}.mode.soon .mtx b,.mode.soon .mtx small{opacity:.6}
+.ico.big{width:150px;height:150px}.ico.big svg{width:100%;height:100%}
+.wfld{display:flex;flex-direction:column;gap:4px;margin:6px 0}.wfld span{font:400 18px Bangers,Impact;letter-spacing:.06em}
+.wfld input{font:400 26px Bangers,Impact,sans-serif;letter-spacing:.06em;border:3px solid #111;padding:4px 10px;background:var(--paper);width:100%;-webkit-user-select:text;user-select:text;text-transform:uppercase}
+#sWelcome{gap:10px}
+#classicOpts{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px;padding:4px 0 6px 18px;border-left:4px solid #111;margin-left:18px;animation:drop .18s ease-out}
+#classicOpts.hide{display:none!important}#classicOpts .btn{min-width:0;width:100%;font-size:24px;padding:6px 14px}#classicOpts .btn.main{font-size:26px}
+@keyframes drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+#classicBtn[aria-expanded="true"]{box-shadow:3px 3px 0 var(--red)}
+#sTitle{justify-content:flex-end;gap:10px;padding-top:0;overflow:hidden}
+#sTitle .coverArt{position:absolute;left:0;top:0;width:100%;height:62%;object-fit:cover;object-position:50% 18%;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);pointer-events:none}
+#sTitle>*:not(.coverArt){position:relative}
+#sTitle .logo{font-size:clamp(64px,22vw,104px);margin-bottom:-4px}
+#sTitle .tagline{margin:0 0 4px}
+#sTitle .btn{padding:7px 22px;font-size:24px}#sTitle .btn.main{font-size:30px}
+/* MyLiga creator */
+#crPanel{display:flex;flex-direction:column;gap:8px;height:100%}
+.crSec{display:flex;gap:6px}.crSec button{flex:1;font:400 19px Bangers,Impact;letter-spacing:.06em;background:#fff;color:#111;border:3px solid #111;border-radius:10px;padding:3px 0;cursor:pointer}
+.crSec button.on{background:#111;color:#fff;box-shadow:3px 3px 0 var(--red)}.crSec button.done{background:#e9e4da}.crSec button:disabled{opacity:.45;cursor:default}
+.crMain{display:flex;align-items:stretch;min-height:0}
+.crTabs{display:flex;flex-direction:column;gap:6px;padding-top:34px;flex:0 0 52px;z-index:1}
+.crTabs button{width:56px;height:50px;background:#e9e4da;border:3px solid #111;border-right:0;border-radius:12px 0 0 12px;padding:6px 10px 6px 8px;cursor:pointer;color:#111;display:flex;align-items:center;justify-content:center}
+.crTabs button svg{width:30px;height:30px}.crTabs button.on{background:#fff;margin-right:-3px;width:59px;position:relative}
+.crCard{flex:1;min-width:0;background:#fff;border:3px solid #111;border-radius:14px;box-shadow:5px 5px 0 #111;overflow:hidden;display:flex;flex-direction:column}
+.crHead{display:flex;align-items:center;justify-content:center;position:relative;background:#111;color:#fff;font:400 22px/1 Bangers,Impact;letter-spacing:.08em;padding:6px 40px}
+.crHead button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;font-size:20px;cursor:pointer;padding:2px 6px}
+.crGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px}
+.crGrid.c3{grid-template-columns:repeat(3,1fr)}
+.crT{aspect-ratio:1;background:#f4f1ea;border:3px solid #111;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:0;overflow:hidden;position:relative;color:#111;font:400 13px/1 Bangers,Impact;letter-spacing:.05em;box-shadow:0 3px 0 #111}
+.crT img,.crT canvas{width:100%;height:100%;object-fit:cover;display:block}.crT .tl{position:absolute;left:0;right:0;bottom:0;background:#fffe;padding:2px 0 3px;text-align:center;font-size:12px}
+.crT.txt{font-size:15px;padding:4px;text-align:center}.crT.txt small{display:block;font:500 10px/1.2 system-ui,sans-serif;margin-top:3px;color:#555;letter-spacing:0}
+.crT.on{background:#fff;outline:3px solid var(--red);outline-offset:2px}.crT.on::after{content:'✓';position:absolute;right:4px;top:2px;color:var(--red);font:400 16px Bangers}
+.crT:active{transform:translateY(3px);box-shadow:none}
+.crT .ld{width:20px;height:20px;border:3px solid #ccc;border-top-color:#111;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.crPg{display:flex;align-items:center;justify-content:center;gap:12px;padding:0 0 8px;margin-top:auto}.crPg button{background:none;border:0;font:400 22px Bangers;cursor:pointer;color:var(--red);padding:0 8px}.crPg button:disabled{color:#ccc}
+.crPg span{font:400 14px Bangers,Impact;letter-spacing:.08em;background:#f4f1ea;border-radius:20px;padding:2px 26px}
+.crSw{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:2px 0}.crSw button{width:34px;height:34px;border-radius:50%;border:3px solid #111;cursor:pointer;padding:0}.crSw button.on{outline:3px solid var(--red);outline-offset:2px}
+.crSwL{font:400 14px Bangers,Impact;letter-spacing:.1em;text-align:center;color:#555}
+.crH{padding:10px 12px 4px}.crH .hrow{display:flex;align-items:baseline;margin:0;flex-wrap:wrap;gap:4px 10px}.crH .hrow b{font:400 30px/1 Bangers,Impact}.crH .hrow small{font:500 12px system-ui,sans-serif;color:#555}.crH input{width:100%;accent-color:#d62828;height:28px}
+.crTune{display:flex;flex-direction:column;gap:2px;padding:0 4px}.crTune label{display:grid;grid-template-columns:86px 1fr 30px;align-items:center;gap:8px}.crTune span{font:400 15px Bangers,Impact;letter-spacing:.06em}.crTune input{width:100%;accent-color:#d62828;height:26px}.crTune b{font:400 16px Bangers,Impact;text-align:right}.crTune .chip{align-self:flex-end;margin-top:2px}
+.crOk{display:flex;gap:10px;align-items:center;margin-top:4px}.crOk .btn{min-width:0;flex:1;transform:none;font-size:26px;padding:6px 10px}.crOk .btn.main{flex:2;border-radius:12px;font-size:30px}
+/* MyLiga */
+.mlscr{justify-content:flex-start;gap:10px;overflow-y:auto}
+.mlscr h2{margin-top:4px}.mlscr .sub2{font:500 13px/1.35 system-ui,sans-serif;color:#333;margin:-4px 0 2px;max-width:340px}
+.plist{display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px}
+.pcard,.bcard{display:flex;flex-direction:column;align-items:flex-start;gap:3px;background:#fff;color:#111;border:4px solid #111;box-shadow:5px 5px 0 #111;padding:9px 12px;text-align:left;cursor:pointer;font:inherit;position:relative;width:100%}
+.pcard.on,.bcard.on{box-shadow:5px 5px 0 var(--red);outline:3px solid var(--red);outline-offset:-8px}
+.pcard b,.bcard>b{font:400 26px/1 Bangers,Impact;letter-spacing:.05em}
+.pcard small,.bcard small{font:500 12px/1.35 system-ui,sans-serif;color:#333}
+.ptag,.bkit{position:absolute;right:10px;top:9px;font:400 15px Bangers,Impact;letter-spacing:.08em;background:#111;color:#fff;padding:1px 8px;border:2px solid #111}
+.stars{font-size:15px;color:#111;letter-spacing:1px}.stars span{color:#ccc}
+.bars{display:grid;grid-template-columns:auto 1fr 28px;gap:2px 8px;align-items:center;width:100%;margin-top:4px}
+.bars .bl{font:400 14px Bangers,Impact;letter-spacing:.06em;text-transform:uppercase}
+.bars .bt{height:9px;border:2px solid #111;background:#fff;display:block}.bars .bt i{display:block;height:100%;background:#111}
+.bars .bv{font:400 14px Bangers,Impact;text-align:right}
+.out{font:500 12px/1.3 system-ui,sans-serif;border-left:5px solid;padding:2px 0 2px 8px;margin-top:6px}
+.mlbar{position:sticky;bottom:0;display:flex;gap:10px;width:100%;max-width:360px;padding:8px 0 4px;background:linear-gradient(transparent,var(--paper) 30%)}
+.mlbar .btn{min-width:0;flex:1;font-size:22px;padding:6px 10px}.mlbar .btn.main{font-size:26px;flex:2}
+#hubCard{display:flex;align-items:center;gap:12px;width:100%;max-width:360px;background:#111;color:#fff;border:4px solid #111;box-shadow:6px 6px 0 var(--red);padding:10px 12px}
+#hubCard .ico{flex:0 0 96px;height:96px}#hubCard .ico svg{width:100%;height:100%}
+#hubCard .hc{display:flex;flex-direction:column;gap:2px;min-width:0}#hubCard .hc b{font:400 30px/1 Bangers,Impact;letter-spacing:.04em}
+#hubCard .hc small{font:500 12px/1.3 system-ui,sans-serif;opacity:.8}.ovr{font:400 16px Bangers,Impact;letter-spacing:.1em}.ovr b{font-size:34px!important;color:#e9c23a}
+#hubStage{width:100%;max-width:360px;background:#fff;border:3px solid #111;padding:6px 10px;font:400 18px Bangers,Impact;letter-spacing:.04em;display:flex;flex-direction:column}
+#hubStage span{font:500 12px system-ui,sans-serif}
+#hubBtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:360px}
+#hubBtns .btn{min-width:0;font-size:22px;padding:8px 6px;transform:none}#hubBtns .btn.main{grid-column:1/-1;font-size:28px}
+#hubAttrs{width:100%;max-width:360px;background:#fff;border:3px solid #111;padding:6px 10px}
+#retireBox{width:100%;max-width:360px}
+/* My Team */
+#sTeam{padding:0;justify-content:flex-start;gap:0;background:transparent;overflow:hidden}
+#teamTop{position:relative;height:44%;width:100%;flex:0 0 auto;touch-action:none}
+#teamTop .tbar{position:absolute;left:8px;right:8px;top:max(8px,env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:center;gap:6px}
+#teamTop .tbar .btn{min-width:0;font-size:18px;padding:3px 12px;box-shadow:3px 3px 0 #111;border-width:3px}
+#teamTop .tbot{position:absolute;left:8px;right:8px;bottom:8px;display:flex;justify-content:space-between;align-items:flex-end;gap:6px;flex-wrap:wrap}
+#tRole{font:400 16px Bangers,Impact;letter-spacing:.08em;color:var(--red);background:#fff;border:2px solid #111;padding:1px 8px}
+#teamPanel{flex:1 1 auto;width:100%;overflow-y:auto;overflow-x:hidden;background:var(--paper) radial-gradient(#0000001a 1.2px,transparent 1.6px) 0 0/8px 8px;border-top:4px solid #111;padding:10px 12px max(20px,env(safe-area-inset-bottom));text-align:left;display:flex;flex-direction:column;gap:10px;touch-action:pan-y}
+.chip{font:400 16px Bangers,Impact,sans-serif;letter-spacing:.05em;background:#fff;color:var(--ink);border:3px solid var(--ink);padding:3px 10px;cursor:pointer;box-shadow:2px 2px 0 var(--ink);display:inline-flex;gap:5px;align-items:baseline}
+.chip small{font-size:12px;color:var(--red)}
+.chip.on{background:var(--ink);color:#fff;box-shadow:2px 2px 0 var(--red)}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.lbl{font:400 14px Bangers,Impact;letter-spacing:.1em;color:var(--mute);min-width:70px}
+.tform{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;background:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:12px}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}.fld.wide{grid-column:1/-1}
+.fld input{font:400 20px Bangers,Impact,sans-serif;letter-spacing:.05em;border:3px solid var(--ink);padding:3px 8px;background:var(--paper);color:var(--ink);width:100%;min-width:0;-webkit-user-select:text;user-select:text}
+.opts{display:flex;flex-wrap:wrap;gap:5px}
+.opts button{font:400 15px Bangers,Impact,sans-serif;letter-spacing:.05em;background:#fff;color:var(--ink);border:2px solid var(--ink);padding:3px 8px;cursor:pointer}
+.opts button.on{background:var(--ink);color:#fff;box-shadow:2px 2px 0 var(--red)}
+.opts.sw button{width:32px;height:28px;padding:0;border-width:3px}.opts.sw button.on{outline:3px solid var(--red);outline-offset:2px;box-shadow:none}
+.attrs{background:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:10px 12px;display:flex;flex-direction:column;gap:5px}
+.attrs h4{margin:0 0 4px;font:400 22px Bangers,Impact;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.attrs h4 small{font:400 14px Bangers,Impact;color:var(--red);letter-spacing:.08em}
+.arow{display:grid;grid-template-columns:64px minmax(0,1fr) 28px 52px;align-items:center;gap:6px}
+.arow .an{font:400 15px Bangers,Impact;letter-spacing:.05em;text-align:right;white-space:nowrap}
+.chevs{display:flex;align-items:center;gap:1px;min-width:0;overflow:hidden}
+.chev{flex:1 1 0;min-width:5px;max-width:20px;height:12px;background:#dcd8cf;clip-path:polygon(0 0,58% 0,100% 50%,58% 100%,0 100%,42% 50%)}
+.chev.f{background:var(--ink)}.chev.n{background:var(--red)}.chev.cap{background:repeating-linear-gradient(45deg,#dcd8cf 0 2px,#fff 2px 4px)}
+.cap-m{font:400 16px Bangers,Impact;color:var(--red);margin-left:2px;flex:0 0 auto}
+.arow .av{font:400 17px Bangers,Impact;text-align:center}
+.pm{display:flex;gap:3px}.pm button{font:400 16px Bangers,Impact;width:24px;height:24px;border:2px solid var(--ink);background:#fff;cursor:pointer;padding:0;line-height:1}
+.pm button:disabled{opacity:.3;cursor:default}
+.unl{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 6px}.unl span{font:400 12px Bangers,Impact;letter-spacing:.05em;border:2px solid var(--ink);padding:1px 6px;background:var(--ink);color:#fff}.unl span.lk{background:#fff;color:#999;border-color:#bbb}
+.tpage[hidden]{display:none!important}
+.note{font-size:12px;color:#555;max-width:340px;margin:0}
+</style>
+</head>
+<body>
+<div id="app">
+ <canvas id="gl"></canvas>
+ <canvas id="hud"></canvas>
+ <button id="pauseBtn" aria-label="Pause">II</button>
+
+ <section class="scr" id="sTitle">
+  <img class="coverArt" src="img/cover.jpg" alt="Jolo, Hanz and Paolo of Brgy. Mapayapa">
+  <h1 class="logo">PALO<span>!</span></h1>
+  <p class="tagline">PINOY BALIBOL</p>
+  <button class="btn main" data-go="sMode">Play</button>
+  <button class="btn" data-go="sHow">How to play</button>
+  <button class="btn" data-go="sSet">Settings</button>
+  <div class="foot">Developed by Hanz Rodil</div>
+  <div class="foot" id="verLine" style="margin-top:0;font-size:12px"></div>
+  <div class="note hide" id="updNote" style="background:#fff;border:3px solid #111;padding:6px 10px;font-size:13px"></div>
+ </section>
+
+ <section class="scr hide" id="sMode">
+  <h2>Choose a mode</h2>
+  <button class="mode" id="classicBtn" aria-expanded="false"><span class="ico"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="#fff" stroke="#111" stroke-width="6"/><path d="M50 8c-6 16-6 34 0 42M50 50c-18 2-33-4-41-14M50 50c10 13 26 20 37 19" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/><path d="M30 14c-2 14 2 26 10 34M88 40c-14-4-27-2-36 8M24 82c8-10 18-16 30-18" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round"/><path d="M26 30a30 30 0 0 1 16-14" fill="none" stroke="#d62828" stroke-width="5" stroke-linecap="round"/></svg></span><span class="mtx"><b>Classic</b><small>6v6 · one match, fast or long</small></span></button>
+  <div class="sub hide" id="classicOpts">
+   <button class="btn main" data-act="quick">Fast game<small>1 set to 15, cap 17 · ~6–8 min</small></button>
+   <button class="btn" data-act="exhib">Long game<small>1 set to 25, cap 30 · ~12–15 min</small></button>
+  </div>
+  <button class="mode soon" data-mode="myliga" disabled><span class="ico" id="jerseyIco"></span><span class="mtx"><b>MyLiga</b><small>Your career, from barangay to the national team</small><i>Coming soon</i></span></button>
+  <button class="mode soon" disabled><span class="ico"><svg viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(-18 36 52)"><path d="M36 8c12 0 18 10 18 24 0 12-5 20-5 34 0 14-4 26-13 26S23 80 23 66c0-14-5-22-5-34C18 18 24 8 36 8z" fill="#2f62d8" stroke="#111" stroke-width="5"/><path d="M36 13c9 0 13 8 13 19 0 10-4 18-4 31 0 12-3 22-9 22s-9-10-9-22c0-13-4-21-4-31 0-11 4-19 13-19z" fill="#fff"/><path d="M24 46c4-10 8-18 12-24 4 6 8 14 12 24" fill="none" stroke="#d62828" stroke-width="5" stroke-linecap="round"/><circle cx="36" cy="22" r="3" fill="#111"/></g><g transform="rotate(14 68 56)"><path d="M68 12c12 0 18 10 18 24 0 12-5 20-5 34 0 14-4 26-13 26S55 84 55 70c0-14-5-22-5-34 0-14 6-24 18-24z" fill="#2f62d8" stroke="#111" stroke-width="5"/><path d="M68 17c9 0 13 8 13 19 0 10-4 18-4 31 0 12-3 22-9 22s-9-10-9-22c0-13-4-21-4-31 0-11 4-19 13-19z" fill="#fff"/><path d="M56 50c4-10 8-18 12-24 4 6 8 14 12 24" fill="none" stroke="#d62828" stroke-width="5" stroke-linecap="round"/><circle cx="68" cy="26" r="3" fill="#111"/></g></svg></span><span class="mtx"><b>Streets</b><small>3v3 street games up to 11</small><i>Coming soon</i></span></button>
+  <button class="btn" data-go="sTitle" style="min-width:0">Back</button>
+ </section>
+
+ <section class="scr hide" id="sWelcome">
+  <h1 class="logo" style="font-size:72px">PALO<span>!</span></h1>
+  <p class="tagline">Welcome, player!</p>
+  <div class="ico big" id="jerseyPrev"></div>
+  <div class="panel">
+   <label class="wfld"><span>What's your name?</span><input id="wName" maxlength="10" autocomplete="off" placeholder="e.g. Hanz"></label>
+   <label class="wfld"><span>Jersey number</span><input id="wNum" type="number" min="0" max="99" inputmode="numeric" placeholder="7"></label>
+  </div>
+  <button class="btn main" id="wGo">Let's play!</button>
+ </section>
+
+
+ <section class="scr hide" id="sHow">
+  <h2>How to play</h2>
+  <div class="panel"><ul>
+   <li>You control <b>Brgy. Mapayapa</b> (white, near side). Every touch your team makes is yours: <b>serve, pass, set, spike, block</b>.</li>
+   <li><b>Right thumb · one button.</b> A circle shrinks under the player who's about to touch the ball: <b style="color:#d62828">red</b> → <b style="color:#e8a33a">orange</b> → <b style="color:#1f9d55">green</b>. Press on green for <b>PERFECT</b>. Better ratings give a wider green.</li>
+   <li><b>Left thumb · stick.</b> Serve and spike: left / right aims, up = tip. Set: left = outside hitter, right = opposite, down = middle quick, up = setter dump (or back-row pipe).</li>
+   <li>Pressing deep in the red can cause a <b>fault</b>: serve into the net or out, double contact, foot fault, net touch. Not pressing at all lets the ball drop.</li>
+   <li>6v6 with real <b>rotation</b>: you rotate on side-out, the server is whoever is in zone 1, and the libero (Ica) swaps in for the back-row middle.</li>
+   <li>Perfect touches fill <b>HYPE</b>. When it's full, your next spike is a <b>SUPER PALO</b>.</li>
+   <li>Keyboard: arrows / WASD = stick, Space / J = button, Esc = pause.</li>
+  </ul></div>
+  <button class="btn" data-go="sTitle">Back</button>
+ </section>
+
+ <section class="scr hide" id="sSet" style="justify-content:flex-start">
+  <h2>Settings</h2>
+  <div class="panel">
+   <h3>Gameplay</h3>
+   <div class="srow">Difficulty <div class="seg" data-set="diff"><button data-v="0">Easy</button><button data-v="1">Normal</button><button data-v="2">Hard</button></div></div>
+   <div class="srow">Sound <div class="seg" data-set="sound"><button data-v="1">On</button><button data-v="0">Off</button></div></div>
+   <div class="srow">Vibration <div class="seg" data-set="vib"><button data-v="1">On</button><button data-v="0">Off</button></div></div>
+   <h3>Graphics</h3>
+   <div class="srow">Quality <div class="seg" data-set="gfx"><button data-v="auto">Auto</button><button data-v="low">Low</button><button data-v="medium">Med</button><button data-v="high">High</button></div></div>
+   <div class="srow">Resolution <div class="seg" data-set="res"><button data-v="0.75">75%</button><button data-v="1">100%</button><button data-v="1.25">125%</button><button data-v="native">Native</button></div></div>
+   <div class="srow">Frame rate <div class="seg" data-set="fps"><button data-v="30">30</button><button data-v="60">60</button></div></div>
+   <div class="srow">Ink outlines <div class="seg" data-set="outl"><button data-v="1">On</button><button data-v="0">Off</button></div></div>
+   <div class="srow">Venue <div class="seg" data-set="venue"><button data-v="1">Full</button><button data-v="0">Simple</button></div></div>
+   <div class="srow">Player details <div class="seg" data-set="detail"><button data-v="2">Full</button><button data-v="1">Near</button><button data-v="0">Off</button></div></div>
+   <div class="srow">Effects <div class="seg" data-set="fx"><button data-v="1">On</button><button data-v="0">Reduced</button></div></div>
+  </div>
+  <p class="note">Auto measures your frame rate for a few seconds at the start of a match and picks Low, Medium or High. Player details = faces, ponytails and head tracking (Near = your team only). 30 fps saves battery.</p>
+  <button class="btn" data-go="sTitle">Back</button>
+ </section>
+
+ <section class="scr hide" id="sTeam">
+  <div id="teamTop">
+   <div class="tbar"><button class="btn" id="tBack" data-back="sTitle">‹ Back</button><div class="seg" id="tView" hidden><button data-v="face" class="on">Face</button><button data-v="body">Body</button><button data-v="feet">Shoes</button></div></div>
+   <div class="tbot"><span id="tRole">Setter</span><div class="seg" id="tPose" hidden><button data-v="idle" class="on">Ready</button><button data-v="celebrate">Yes!!</button><button data-v="frust">Ugh</button><button data-v="spike">Spike</button></div></div>
+  </div>
+  <div id="teamPanel">
+   <div class="row" id="roster"></div>
+   <div id="crPanel" hidden></div>
+   <div class="row" id="tTabsRow"><div class="seg" id="tTabs"><button data-v="look" class="on">Look</button><button data-v="gear">Gear</button><button data-v="kit">Kit</button><button data-v="attr">Attributes</button></div>
+    <button class="chip" id="tRand">Randomize</button><button class="chip" id="tReset">Reset</button></div>
+   <div class="tform">
+    <div class="tpage" id="tp_look" style="display:contents">
+     <label class="fld" data-cs="none"><span class="lbl">Name</span><input id="fName" maxlength="12" autocomplete="off"></label>
+     <label class="fld" data-cs="none"><span class="lbl">Number</span><input id="fNum" type="number" min="0" max="99" inputmode="numeric"></label>
+     <div class="fld wide" data-cs="hair"><span class="lbl">Hair</span><div class="opts" data-k="hair"></div></div>
+     <div class="fld wide" data-cs="hair"><span class="lbl">Hair colour</span><div class="opts sw" data-k="hairC"></div></div>
+     <div class="fld wide" data-cs="body"><span class="lbl">Skin</span><div class="opts sw" data-k="skin"></div></div>
+     <div class="fld wide" data-cs="face"><span class="lbl">Eyes</span><div class="opts" data-k="eyes"></div></div>
+     <div class="fld wide" data-cs="face"><span class="lbl">Brows</span><div class="opts" data-k="brows"></div></div>
+     <div class="fld wide" data-cs="face"><span class="lbl">Mouth</span><div class="opts" data-k="mouth"></div></div>
+    </div>
+    <div class="tpage" id="tp_gear" style="display:contents" hidden>
+     <div class="fld wide"><span class="lbl">Gear</span><div class="opts" data-k="gear"></div></div>
+     <div class="fld wide"><span class="lbl">Shoes</span><div class="opts" data-k="shoeCut"></div></div>
+     <div class="fld wide"><span class="lbl">Shoe colour</span><div class="opts sw" data-k="shoeCol"></div></div>
+    </div>
+    <div class="tpage fld wide" id="tp_kit" hidden><div class="attrs" id="kitPanel"></div></div>
+    <div class="tpage fld wide" id="tp_attr" hidden><div class="attrs" id="attrs"></div></div>
+   </div>
+   <p class="note" id="teamNote">Changes save on this device.</p>
+   <button class="btn main" id="tNext" hidden>Next: Position ›</button>
+  </div>
+ </section>
+
+  <section class="scr hide mlscr" id="sPos">
+  <h2>Pick your position</h2>
+  <p class="sub2">This sets your starting ratings and what you can grow into. You can't change it later in this career.</p>
+  <div class="plist" id="posList"></div>
+  <div class="mlbar"><button class="btn" data-go="sTeam">‹ Look</button><button class="btn main" id="posNext" disabled>Next: Barangay ›</button></div>
+ </section>
+
+ <section class="scr hide mlscr" id="sBrgy">
+  <h2>Pick your barangay</h2>
+  <p class="sub2"><b id="brgyPos"></b><br>Each barangay plays its own way. A weaker team means more minutes for you and more Pawis to grow.</p>
+  <div class="plist" id="brgyList"></div>
+  <div class="mlbar"><button class="btn" data-go="sPos">‹ Position</button><button class="btn main" id="brgyGo" disabled>Sign up!</button></div>
+ </section>
+
+ <section class="scr hide mlscr" id="sCareer">
+  <h2>MyLiga</h2>
+  <div id="hubCard"></div>
+  <div id="hubStage"></div>
+  <div id="hubBtns">
+   <button class="btn main" data-h="next" disabled>Next match<small>Coming in the next update</small></button>
+   <button class="btn" data-h="attr">Attributes</button>
+   <button class="btn" data-h="locker">Locker</button>
+   <button class="btn" data-h="train">Ensayo<small>Spike drill</small></button>
+   <button class="btn" data-h="retire">New career</button>
+  </div>
+  <div id="hubAttrs" hidden></div>
+  <div class="panel" id="retireBox" hidden><p><b>Start a new career?</b> Your current player and progress will be deleted.</p><div class="row" style="display:flex;gap:8px"><button class="chip" id="retireYes">Yes, start over</button><button class="chip" id="retireNo">Keep playing</button></div></div>
+  <button class="btn" data-go="sMode" style="min-width:0">‹ Modes</button>
+ </section>
+
+ <section class="scr clear hide" id="sPause">
+  <h2>Paused</h2>
+  <button class="btn main" data-act="resume">Resume</button>
+  <button class="btn" data-act="timeout" id="toBtn">Timeout</button>
+  <button class="btn" data-act="restart">Restart match</button>
+  <button class="btn" data-act="quit">Quit to title</button>
+ </section>
+
+ <section class="scr hide" id="sOver">
+  <p class="big" id="oTitle">YOU WIN!</p>
+  <p class="tagline" id="oScore">15 - 12</p>
+  <div class="stats" id="oStats"></div>
+  <button class="btn main" data-act="restart">Rematch</button>
+  <button class="btn" data-act="quit">Title</button>
+  <div class="foot">PALO! · Developed by Hanz Rodil</div>
+ </section>
+</div>
+<script src="lib/three.min.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
