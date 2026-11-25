@@ -37,6 +37,7 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
 .win{color:#111;text-shadow:5px 5px 0 var(--green)}.lose{color:#111;text-shadow:5px 5px 0 var(--red)}
 .foot{font:400 14px Bangers,Impact;letter-spacing:.1em;color:#555;margin-top:6px}
 #plays{position:absolute;z-index:3;left:0;right:0;bottom:50px;display:none;gap:8px;justify-content:center}#plays button{width:min(26vw,96px);aspect-ratio:1/1;flex:none;border:3px solid #111;background:#fff;padding:3px 3px 3px;display:flex;flex-direction:column;align-items:center;gap:1px;font:400 15px Bangers,Impact,sans-serif;line-height:1.05;cursor:pointer;touch-action:manipulation;box-shadow:3px 3px 0 #111}#plays button svg{width:100%;flex:1;min-height:0;display:block}#plays button small{display:block;font:400 10px Bangers,Impact,sans-serif;letter-spacing:.3px;margin-top:2px;opacity:.75}#plays button.on{background:#111;color:#fff;box-shadow:3px 3px 0 #d62828}#plays .pl{position:absolute;left:8px;top:-15px;font:400 11px Bangers;letter-spacing:1px;color:#111;text-shadow:0 0 3px #fff,0 0 3px #fff}
+#svk{position:absolute;z-index:3;right:118px;bottom:64px;display:none;gap:8px}#svk button{width:min(20vw,76px);aspect-ratio:1/1;flex:none;border:3px solid #111;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:2px;font:400 15px Bangers,Impact,sans-serif;line-height:1.05;color:#111;cursor:pointer;touch-action:manipulation;box-shadow:3px 3px 0 #111}#svk button small{font:400 11px Bangers,Impact,sans-serif;opacity:.65}#svk button.on{background:#111;color:#fff}#svk button.on small{opacity:.8}
 #sv{position:absolute;z-index:3;right:16px;bottom:64px;width:92px;height:92px;border-radius:50%;border:4px solid #111;background:#fff;box-shadow:4px 4px 0 #111;font:400 26px Bangers,Impact,sans-serif;color:#111;display:none;align-items:center;justify-content:center;touch-action:none;cursor:pointer;line-height:1}#sv.aim{background:#fff}#sv.aim:after{content:'';position:absolute;inset:14px;border:2px dashed #d62828;border-radius:50%}#sv.go.green{background:#1f9d55;color:#fff}#sv.go{background:#fff}
 #pauseBtn{position:absolute;z-index:4;left:12px;top:max(12px,env(safe-area-inset-top));width:40px;height:40px;border:3px solid #111;background:#fff;border-radius:50%;font:400 18px Bangers;cursor:pointer;display:none}
 .hide{display:none!important}[hidden]{display:none!important}
@@ -159,6 +160,7 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
  <canvas id="gl"></canvas>
  <canvas id="hud"></canvas>
  <div id="plays"></div>
+ <div id="svk"></div>
  <button id="sv" aria-label="Aim and serve"><span></span></button>
  <button id="pauseBtn" aria-label="Pause">II</button>
 
