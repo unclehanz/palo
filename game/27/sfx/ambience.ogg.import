@@ -2,12 +2,12 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://d63asigi013h"
+uid="uid://bb1cp80nb7x30"
 valid=false
 
 [deps]
 
-source_file="res://palo-site/game/24/sfx/squeak.ogg"
+source_file="res://vball/sfx/ambience.ogg"
 
 [params]
 
