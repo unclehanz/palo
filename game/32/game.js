@@ -1,7 +1,7 @@
-/* PALO! — 6v6 barangay volleyball. Developed by Hanz Rodil. v2.2.7 (build 29). Built from src/ by build.sh */
+/* PALO! — 6v6 barangay volleyball. Developed by Hanz Rodil. v2.2.10 (build 32). Built from src/ by build.sh */
 (function(){
 'use strict';
-var GAME_VERSION='2.2.7',GAME_BUILD=29;
+var GAME_VERSION='2.2.10',GAME_BUILD=32;
 /* ===== src/core.js ===== */
 /* PALO! — 6v6 barangay volleyball. Developed by Hanz Rodil. */
 /* saves carried over from v2.0 (Android only, once) + update info from the app shell */
@@ -1035,7 +1035,7 @@ function handWorld(p,which){var v=new THREE.Vector3(),hs=which==='LR'?['L','R']:
 
 function doServe(p,q){var T=p.team,od=-side(T),a=p.actor,human=isHuman(T),kind=p.clip;
  var hp=handWorld(a,'R');B.p={x:hp.x,y:hp.y+.06,z:hp.z};B.held=null;B.heldClip=null;B.live=true;
- var sa=M.serveAim||{x:0,z:6.5},spr={perfect:.3,good:.7,bad:1.2,weak:1.4}[q==='miss'?'weak':q]||.8;
+ var sa=M.serveAim||{x:0,z:6.5},spr=p.ringR!=null?p.ringR*.7:({perfect:.3,good:.7,bad:1.2,weak:1.4}[q==='miss'?'weak':q]||.8);
  var to=human?{x:cl(sa.x+rnd(-spr,spr),-4.4,4.4),y:0,z:od*cl(sa.z+rnd(-spr,spr),1.2,8.8)}:{x:cl(rnd(-3.5,3.5)+rnd(-.5,.5),-4,4),y:0,z:od*rnd(5.5,8.2)};
  if(q==='miss')q='weak';
  var SP={jumpserve:[20,17,14],topspin:[17,15,12.5],jumpfloat:[15,13,11.5],serve:[14,12.5,11],underhand:[10,9.5,9],skyball:[9,9,9]}[kind]||[14,12,11],speed=q==='weak'?9:SP[QI[q]],fault=null;
@@ -1082,7 +1082,7 @@ function doBump(p,q){var T=p.team,d=side(T),a=p.actor,human=isHuman(T);
  B.v=trajTo(B.p,sp,tt);B.last=T;B.lastType='bump';B.threat=null;M.poss=T;
  var C=M.now+tt,mir=sclip==='set'||sclip==='set_low'||sclip==='set_high'?1:setMir(T,sp.x),yaw=mir===1&&!/^(jset|rset|bset)$/.test(sclip)?Math.atan2(lx(T),0):fwdYaw(T);/* the classic clips already face the outside hitter; the move-and-set clips turn from the net to zone 3 */
  planAct(setter,sclip,C,sp,yaw,mir);
- var ps=addPend({team:T,actor:setter,type:'set',S:C-1.1,C:C,cp:sp,bq:q,w:windowOf({actor:setter},'set'),sclip:sclip});
+ var ps=addPend({team:T,actor:setter,type:'set',S:C-(isHuman(T)&&swipeMode()?1.9:1.1),C:C,cp:sp,bq:q,w:windowOf({actor:setter},'set'),sclip:sclip});
  if(!human&&at0){ps.q0=cpuQ(T,setter,'set');if(at0.kind==='dump')ps.at=at0;else buildAttack(ps,at0,ps.q0)}
  setterGlance(setter,T,C)}
 function setMir(T,ax){return Math.abs(ax)<.3?1:-(ax>0?1:-1)*lx(T)}
@@ -1145,7 +1145,7 @@ function attackVel(from,pl){if(pl.tip)return aim(from,pl.to,3.6,true);if(pl.erro
 function doSpike(p,q){var T=p.team,od=-side(T),a=p.actor,human=isHuman(T);
  if(q==='miss'){if(p.block)p.block.done=true;return}
  var plan=p.plan;
- if(!plan){var sa=spikeAim(p),tip=sa.tip,sup=M.hype>=100&&!tip,sc={perfect:.25,good:.6,bad:1.2}[q]||.8;
+ if(!plan){var sa=spikeAim(p),tip=sa.tip,sup=M.hype>=100&&!tip,sc=p.ringR!=null?p.ringR*.7:({perfect:.25,good:.6,bad:1.2}[q]||.8);
   plan={q:q,tip:tip,sup:sup,speed:sup?31:spikeSpeed(a,q)*p.sq,error:!sup&&q==='bad'&&chance(.28)?(chance(.5)?'net':'out'):null,
    to:{x:cl(sa.x+(swipeMode()&&(p.aim||p.aimDef)?rnd(-sc,sc):rnd(-.4,.4)),-4.1,4.1),y:0,z:od*(tip?cl(sa.depth+rnd(-.3,.3),1.2,2.6):cl(sa.depth+(swipeMode()&&(p.aim||p.aimDef)?rnd(-sc,sc):rnd(-.8,.8)),3.2,8.6))}};
   if(!plan.error&&faultRoll(p))plan.error=chance(.6)?'net':'out';
@@ -1178,14 +1178,16 @@ function serveSpot(T,sv){var clip=serveClip(sv),back={jumpserve:3.6,jumpfloat:2.
 function startServe(){var T=M.serving;lineup(0);lineup(1);var sv=ONC[T][1];M.server=sv;M.state='serve';M.pend=[];M.rally=0;M.fx=null;M.blockEval=null;M.poss=T;
  PL.forEach(function(p){p.blocking=false;p.glance=null});
  B.live=false;B.dead=false;B.held=sv;B.heldClip=null;B.netHit=false;B.last=T;B.lastType='serve';B.threat=null;B.float=null;B.touches=0;
- M.serveReadyT=null;M.serveWait=0;M.serveQ=0;M.serveWaitT=0;if(!M.serveAim)M.serveAim={x:0,z:6.5};M.serveSpot=serveSpot(T,sv);SFX.whistle();drawBoard(M.score[0],M.score[1])}
+ M.serveReadyT=null;M.serveWait=0;M.serveQ=0;M.serveK=null;M.svHold=0;M.serveWaitT=0;if(!M.serveAim)M.serveAim={x:0,z:6.5};M.serveSpot=serveSpot(T,sv);SFX.whistle();drawBoard(M.score[0],M.score[1])}
 function serveUpdate(){var sv=M.server,s=M.serveSpot;if(M.state!=='serve'||M.pend.length)return;
  var d=Math.hypot(sv.box.position.x-s.x,sv.box.position.z-s.z),others=PL.every(function(p){return !p.on||p===sv||!p.tgt||Math.hypot(p.box.position.x-p.tgt.x,p.box.position.z-p.tgt.z)<.6});
  if(d<.25&&(others||M.now-M.pointT>5.5)){if(M.serveReadyT==null)M.serveReadyT=M.now+(isHuman(sv.team)?.5:.7)}
  if(M.serveReadyT!=null&&M.now>=M.serveReadyT&&isHuman(sv.team)&&!M.serveQ){if(!M.serveWait){M.serveWait=1;M.serveWaitT=M.now}if(M.now-M.serveWaitT<8)return;stamp('8 SECONDS!',headW(sv),{size:24,fill:'#d62828'});SFX.err()}
  if(M.serveReadyT!=null&&M.now>=M.serveReadyT){M.serveWait=0;var clip=s.clip,tc=CONTACT[clip][0],C=M.now+tc;
   sv.act={id:clip,t0:M.now,tc:tc,B:sv.bake(clip),anchor:{x:sv.box.position.x,z:sv.box.position.z,yaw:fwdYaw(sv.team)},C:C};B.heldClip=sv.act;
-  addPend({team:sv.team,actor:sv,type:'serve',S:Math.max(M.now,C-1.1),C:C,clip:clip,w:windowOf({actor:sv},'serve')})}}
+  var sp0=addPend({team:sv.team,actor:sv,type:'serve',S:Math.max(M.now,C-1.1),C:C,clip:clip,w:windowOf({actor:sv},'serve')});
+  /* swipe mode: the accuracy was locked in when the finger left the AIM button, so the serve fires by itself at contact */
+  if(swipeMode()&&M.serveK!=null&&isHuman(sv.team)){sp0.pressT=M.now;sp0.k=M.serveK;sp0.q=sp0.k<sp0.w.good?'bad':sp0.k<sp0.w.perf?'good':'perfect';sp0.ringR=ringR(sp0.k);sp0.ticked=1;M.serveK=null}}}
 function land(){var side0=B.p.z<0?0:1,w,why,inB=inCourt(B.p);
  if(B.netHit){w=1-B.last;why='NET!'}
  else if(inB){w=1-side0;if(B.last===w)why={serve:'ACE!',spike:'KILL!',tip:'TIP KILL!',dump:'DUMP KILL!',block:'BLOCK!',touch:'KILL!'}[B.lastType]||'POINT!';else why=B.lastType==='touch'?'KILL!':'DROPPED!'}
@@ -1243,12 +1245,15 @@ function formation(p){var T=p.team,d=side(T),L=lx(T);
   var lanes=[2.7,0,-2.7];if(i>=0&&i<3)return {x:lanes[i]*L,z:d*(i===1?6.6:5.9),face:fwdYaw(T)};return {x:ZX[p.zone]*2.6*L,z:d*6.8,face:fwdYaw(T)}}
  /* rally */
  var fr=front(p),poss=M.poss===T&&B.live&&(B.p.z<0?0:1)===T;
+ /* our ball just went over: hitters and setter get back to their lanes right away so they are in place when it comes back */
+ var back=!poss&&B.live&&B.last===T&&B.lastType!=='dump'&&!(p.act&&!p.act.free)&&!p.blocking&&(fr||p.pos==='S');
+ if(back){if(p.pos==='S')return {x:setSpot(T).x,z:setSpot(T).z};var R3=rl(p);return {x:(R3==='OH'?3.4:R3==='MB'?-.2:-3.4)*L,z:d*(R3==='MB'?2.6:3.4)}}
  if(poss){if(p.pos==='S'&&B.touches<2&&!(p.act&&!p.act.free)){var ss=setSpot(T);return {x:ss.x,z:ss.z}}
   if(fr){var R2=rl(p);if(R2==='MB'&&!(p.act&&!p.act.free))return {x:-.5*L,z:d*2.4};var lane=R2==='OH'?3.4:R2==='MB'?-.2:-3.4;return {x:lane*L,z:d*3.4}}
   if(p.pos==='OH'||p.pos==='OPP')return {x:(p.pos==='OH'?.2:-2.4)*L,z:d*6.4};return {x:ZX[p.zone]*2.4*L,z:d*4.8}}
  /* defence: front row at the net shading toward the ball, back row deep */
  var bx=B.live?cl(B.p.x,-4,4):0;
- if(fr){var lane2=p.pos==='OH'?2.7:p.pos==='MB'?0:-2.7;return {x:lane2*L+cl((bx-lane2*L)*.25,-1,1),z:d*.75}}
+ if(fr){var R4=rl(p),lane2=R4==='OH'?2.7:R4==='MB'?0:-2.7;return {x:lane2*L+cl((bx-lane2*L)*.25,-1,1),z:d*.75}}
  var bl=p.pos==='L'?2.6:p.pos==='OH'?0:p.pos==='MB'?0:-2.6;return {x:bl*L+cl((bx-bl*L)*.15,-.6,.6),z:d*(p.pos==='OH'||p.pos==='MB'?7.6:6.9)}}
 
 /* ---------- input ---------- */
@@ -1259,6 +1264,8 @@ function formation(p){var T=p.team,d=side(T),L=lx(T);
 function swipeMode(){return SET.ctl==='swipe'&&M.mode==='play'}
 var SWR=new THREE.Raycaster(),SWP=new THREE.Plane(new THREE.Vector3(0,1,0),0),SWV=new THREE.Vector3();
 function floorAt(nx,ny){SWR.setFromCamera({x:nx,y:ny},cam);return SWR.ray.intersectPlane(SWP,SWV)?{x:SWV.x,z:SWV.z}:null}
+function ringR(k){return lerp(2.1,.45,k)*1.3}/* world radius of the accuracy ring: the area the ball can land in */
+function svK(){var per=.88;return cl(1-.95*.5*(1+Math.cos(6.2832*Math.max(0,M.now-(M.svT0||M.now))/per)),0,1)}
 function pulsePer(p){return p.type==='set'?.72:p.type==='spike'?.8:.88}
 function pulseF(p){return .5*(1+Math.cos(6.2832*Math.max(0,M.now-p.S)/pulsePer(p)))}
 function swipeKQ(p){var f=pulseF(p),w=p.w||{good:.55,perf:.8,red:.28},k=cl(1-f*.95,0,1);return {k:k,q:k<w.good?'bad':k<w.perf?'good':'perfect'}}
@@ -1270,7 +1277,7 @@ function swipeMove(w){var sw=IN.sw;if(!sw||!w)return;var l=sw.path[sw.path.lengt
  if(M.state==='serve'&&M.server&&isHuman(M.server.team)&&M.serveAim&&w.z>1){M.serveAim.x=cl(w.x,-4.2,4.2);M.serveAim.z=cl(w.z,1.6,8.6)}}
 function swipeEnd(e){var sw=IN.sw;if(!sw||e&&e.pointerId!==sw.id)return;IN.sw=null;swipeCommit(sw)}
 function swipeCommit(sw){if(!swipeMode()||M.paused||M.state==='point')return;var p=activePend();if(!p)return;
- var r=swipeKQ(p);p.k=r.k;p.q=r.q;p.pressT=M.now;vib(12);p.ticked=1;
+ var r=p.type==='set'?{k:.9,q:st(p.actor,'set')>=7.5?'perfect':'good'}:swipeKQ(p);p.k=r.k;p.q=r.q;if(p.type==='spike')p.ringR=ringR(r.k);/* sets are not timed */p.pressT=M.now;vib(12);p.ticked=1;
  if(sw&&sw.end){p.aim=sw.end;p.path=sw.path;p.drag=sw.len>.8}
  if(p.type==='block'&&M.now>p.C+GRACE)p.done=true;
  if(p.type==='serve'&&p.aim&&p.aim.z>1){M.serveAim.x=cl(p.aim.x,-4.2,4.2);M.serveAim.z=cl(p.aim.z,1.6,8.6)}
@@ -1314,7 +1321,7 @@ function update(dt){M.now+=dt;if(M.mode==='drill'){drillUpdate(dt);return}
   if(B.p.y<=BR&&B.v.y<0){B.p.y=BR;if(B.live&&M.state==='rally'){land()}else{B.v.y*=-.45;B.v.x*=.7;B.v.z*=.7;if(Math.abs(B.v.y)<.6)B.v.y=0}}}
  /* pending touches */
  M.pend.forEach(function(p){if(p.done||p.type==='block')return;
-  if(isHuman(p.team)){if(p.pressT!==null){if(M.now>=Math.max(p.pressT,p.C))resolve(p,p.q)}else if(M.now>p.C+GRACE){if(swipeMode()&&(p.type==='set'||p.type==='spike')){p.k=.25;p.q='bad';p.auto=1;resolve(p,'bad')}else resolve(p,p.type==='serve'?'weak':'miss')}}
+  if(isHuman(p.team)){if(p.pressT!==null){if(M.now>=Math.max(p.pressT,p.C))resolve(p,p.q)}else if(M.now>p.C+GRACE){if(swipeMode()&&(p.type==='set'||p.type==='spike')){p.k=.25;p.q=p.type==='set'?'good':'bad';p.auto=1;resolve(p,p.q)}else resolve(p,p.type==='serve'?'weak':'miss')}}
   else if(M.now>=p.C){var q=p.type==='bump'?(p.cpuOk?cpuQ(p.team,p.actor,'pass'):'miss'):p.type==='spike'?p.plan.q:p.q0||cpuQ(p.team,p.actor,p.type==='set'?'set':'serve');resolve(p,q)}});
  if(M.blockEval&&M.now>=M.blockEval.t)evalBlock();
  M.pend=M.pend.filter(function(p){return !p.done||p.type==='block'&&M.now<p.C+.6});
@@ -1418,17 +1425,20 @@ function tgt(x,z){tgtRing.visible=tgtFill.visible=true;tgtRing.position.set(x,.0
 function ctrlFrame(){var p=M.mode==='play'&&M.state!=='point'?activePend():null;
  timingRing.visible=sweet.visible=setPath.visible=altA.visible=altB.visible=tgtRing.visible=tgtFill.visible=false;
  var hs=M.mode==='play'&&M.state==='serve'&&M.server&&isHuman(M.server.team)&&M.serveAim;if(hs){tgt(M.serveAim.x,M.serveAim.z);tgtRing.scale.setScalar(1)}
- if(!p)return null;
- var sw=swipeMode(),a=p.actor,k=sw?(p.pressT!==null?p.k:swipeKQ(p).k):cl((M.now-p.S)/(p.C-p.S),0,1),s=stick(),w=p.w||{good:.55,perf:.8},ax=a.act?a.act.anchor.x:a.box.position.x,az=a.act?a.act.anchor.z:a.box.position.z;
+ if(!p){if(hs&&M.svHold&&swipeMode()){var k0=svK(),sa0=M.serveAim,wv={good:.55,perf:.8};timingRing.visible=sweet.visible=true;timingRing.scale.setScalar(ringR(k0));timingRing.position.set(sa0.x,.05,sa0.z);sweet.position.set(sa0.x,.045,sa0.z);sweet.scale.setScalar(ringR(.8));ringMat.color.set(k0<.55?'#d62828':k0<.8?'#e8a33a':'#1f9d55')}return null}
+ var sw=swipeMode(),a=p.actor,k=sw?(p.type==='set'?0:p.pressT!==null?p.k:swipeKQ(p).k):cl((M.now-p.S)/(p.C-p.S),0,1),s=stick(),w=p.w||{good:.55,perf:.8},ax=a.act?a.act.anchor.x:a.box.position.x,az=a.act?a.act.anchor.z:a.box.position.z;
  timingRing.visible=sweet.visible=true;timingRing.scale.setScalar(lerp(2.1,.45,k));timingRing.position.set(ax,.05,az);sweet.position.set(ax,.045,az);
  sweet.scale.setScalar(lerp(2.1,.45,w.perf)/.82);
+ if(sw&&p.type==='set')timingRing.visible=sweet.visible=false;/* the set is not timed: one swipe picks the hitter */
  ringMat.color.set(k<w.good?'#d62828':k<w.perf?'#e8a33a':'#1f9d55');if(k>=w.perf&&!p.ticked){p.ticked=1;SFX.tick()}
  if(sw&&p.type==='set'){var pk=IN.sw&&IN.sw.end?swipePick(0,a,IN.sw):null,at=pk&&pk.at;if(at){var tp=at.kind==='dump'?new THREE.Vector3(0,0,2.2):new THREE.Vector3(at.x,3,-(at.z||1));arcPts(setPath,V3(p.cp),tp,tp.y?1.4:.9);tgt(tp.x,tp.y?tp.z:2.2);p.hint=at.kind==='dump'?'DUMP':at.p.b.name}else p.hint=null}
  else if(p.type==='set'){var f=V3(p.cp),o=attackOptions(0,a),c=setChoice(),pts={};
   ['left','right','down','up'].forEach(function(key){var at=key==='left'?o.left:key==='right'?(o.right||o.left):key==='down'?(o.quick||o.left):(o.dump||o.pipe||o.left);if(!at)return;pts[key]=at.kind==='dump'?new THREE.Vector3(0,0,2.2):new THREE.Vector3(at.x,3,-(at.z||1))});
   var cur=pts[c]||pts.left,others=Object.keys(pts).filter(function(x){return pts[x]!==cur});if(cur){arcPts(setPath,f,cur,cur.y?1.4:.9);tgt(cur.x,cur.y?cur.z:2.2)}
   if(others[0])arcPts(altA,f,pts[others[0]],1.2);if(others[1])arcPts(altB,f,pts[others[1]],1.2)}
- if(sw&&p.type==='spike'){var q0=IN.sw&&IN.sw.end&&IN.sw.end.z>.2?IN.sw.end:p.aimDef,tx0=q0?cl(q0.x,-4.1,4.1):0,tz0=q0?cl(q0.z,.8,8.8):6.5,tp0=!!q0&&tz0<2.8;arcPts(setPath,V3(p.cp),new THREE.Vector3(tx0,0,tz0),tp0?.8:.15);tgt(tx0,tz0);p.hint=tp0?'TIP':q0?'AIM':'DRAG TO AIM'}
+ if(sw&&p.type==='spike'){var q0=IN.sw&&IN.sw.end&&IN.sw.end.z>.2?IN.sw.end:p.aimDef,tx0=q0?cl(q0.x,-4.1,4.1):0,tz0=q0?cl(q0.z,.8,8.8):6.5,tp0=!!q0&&tz0<2.8;arcPts(setPath,V3(p.cp),new THREE.Vector3(tx0,0,tz0),tp0?.8:.15);tgt(tx0,tz0);p.hint=tp0?'TIP':q0?'AIM':'DRAG TO AIM';
+  /* the spike's timing ring lives on the target: let go on the small ring to hit it accurately */
+  p.tgtW={x:tx0,z:tz0};timingRing.position.set(tx0,.05,tz0);sweet.position.set(tx0,.045,tz0);timingRing.scale.setScalar(lerp(2.1,.45,k)*1.3);sweet.scale.setScalar(lerp(2.1,.45,w.perf)/.82*1.3)}
  else if(p.type==='spike'){var tip=s.y<-.5&&Math.abs(s.x)<.6,tx=cl(-s.x*3.8,-4.1,4.1),tz=tip?1.9:6.5;arcPts(setPath,V3(p.cp),new THREE.Vector3(tx,0,tz),tip?.8:.15);tgt(tx,tz)}
  if(p.type==='serve'){p.hint=null;var sa=M.serveAim||{x:0,z:6.8};arcPts(setPath,V3(B.p),new THREE.Vector3(sa.x,0,sa.z),3);tgt(sa.x,sa.z)}
  return {p:p,k:k,w:w}}
@@ -1439,7 +1449,7 @@ function txt(s,x,y,size,fill,stroke,lw,align,rot){o.save();o.translate(x,y);if(r
 function inkText(s,x,y,size,fill,rot){o.save();o.translate(x,y);o.rotate(rot||0);o.font=size+'px Bangers, Impact, sans-serif';o.textAlign='center';o.lineJoin='round';
  o.lineWidth=size*.36;o.strokeStyle='#111';o.strokeText(s,0,0);o.lineWidth=size*.15;o.strokeStyle='#fff';o.strokeText(s,0,0);o.fillStyle=fill==='#fff'?'#111':fill;o.fillText(s,0,0);o.restore()}
 var DOTS=null;
-function drawHUD(CT){var W=hud.width,H0=hud.height,H=H0*GLH,u=W/300,play=M.mode==='play';o.clearRect(0,0,W,H0);var OFF=GLH>=1&&play;var svMode=OFF&&swipeMode()&&UI.screen==='game'&&!M.paused&&humanServing()?(M.serveQ||M.pend.length?'serve':'aim'):null;window.setSv&&window.setSv(svMode);window.setPlays&&window.setPlays(OFF&&UI.screen==='game'&&!M.paused&&!svMode);/* swipe layout: the court fills the screen, so all call-outs live in the top-left strip instead of over the court */
+function drawHUD(CT){var W=hud.width,H0=hud.height,H=H0*GLH,u=W/300,play=M.mode==='play';o.clearRect(0,0,W,H0);var OFF=GLH>=1&&play;var svMode=OFF&&swipeMode()&&UI.screen==='game'&&!M.paused&&humanServing()?(M.serveQ||M.pend.length?'wait':'aim'):null;window.setSv&&window.setSv(svMode);window.setPlays&&window.setPlays(OFF&&UI.screen==='game'&&!M.paused&&!svMode);/* swipe layout: the court fills the screen, so all call-outs live in the top-left strip instead of over the court */
  if(UI.screen==='team')return;
  o.save();o.beginPath();o.rect(0,0,W,H);o.clip();
  /* spike splash */
@@ -1476,20 +1486,18 @@ function drawHUD(CT){var W=hud.width,H0=hud.height,H=H0*GLH,u=W/300,play=M.mode=
  if(!play){if(GLH<1)txt('PALO!',W/2,DT+DH*.55,56*u,'#111','#d62828',0);return}
  var act=CT?CT.p:null,k=CT?CT.k:0,w=CT?CT.w:{good:.55,perf:.8},green=act&&k>=w.perf,nxt=act||nextHumanPend(),s=stick();
  var pr='';if(act)pr={serve:'SERVE! stick aims · press on green',block:'BLOCK! jump on green',bump:'PASS! press on green',set:'SET! stick picks the hitter',spike:M.hype>=100?'SUPER SPIKE! press on green':'SPIKE! stick aims · press on green'}[act.type];
- if(act&&swipeMode())pr={serve:'SERVE! tap on the small ring',block:'BLOCK! tap on small',bump:'PASS! tap on small',set:'SET! swipe to a hitter',spike:M.hype>=100?'SUPER SPIKE! swipe to aim':'SPIKE! swipe to aim'}[act.type];
- else if(M.state==='serve'&&M.server&&isHuman(M.server.team))pr=M.serveQ?'GET READY…':swipeMode()?'AIM · LET GO TO SERVE':'AIM · TAP TO SERVE';
+ if(act&&swipeMode())pr={serve:'SERVE! tap on the small ring',block:'BLOCK! tap on small',bump:'PASS! tap on small',set:'SET! one swipe to a hitter',spike:M.hype>=100?'SUPER SPIKE! let go on the small ring':'SPIKE! let go on the small ring'}[act.type];
+ else if(M.state==='serve'&&M.server&&isHuman(M.server.team))pr=M.serveQ?'GET READY…':swipeMode()?(M.svHold?'LET GO ON THE SMALL RING':'HOLD AIM · SMALL RING = ACCURATE'):'AIM · TAP TO SERVE';
  else if(M.state==='point')pr=M.msg&&M.msg.w===0?'NICE!':'SHAKE IT OFF';else if(nxt)pr='GET READY…';else if(M.state==='serve'&&M.serving===1)pr='RECEIVE';else if(B.live&&B.p.z>0)pr='DEFEND!';
  if(pr){o.font=20*u+'px Bangers, Impact';var tw=o.measureText(pr).width+28*u;o.fillStyle=act?'#111':'#fff';o.strokeStyle='#111';o.lineWidth=3*u;o.fillRect(W/2-tw/2,DT+12*u,tw,30*u);o.strokeRect(W/2-tw/2,DT+12*u,tw,30*u);txt(pr,W/2,DT+34*u,20*u,act?'#fff':'#111')}
  if(act&&!swipeMode()){var who=act.actor.b.name+' #'+act.actor.b.num;txt(who,W/2,DT+56*u,13*u,'#555')}
- if(swipeMode()){var hint=act?(act.hint||{serve:'TAP SERVE ON SMALL',block:'TAP ON SMALL',bump:'TAP ON SMALL',set:'DRAG TO A TEAMMATE',spike:'DRAG WHERE IT GOES'}[act.type]):'';
+ if(swipeMode()){var hint=act?(act.hint||{serve:'TAP SERVE ON SMALL',block:'TAP ON SMALL',bump:'TAP ON SMALL',set:'SWIPE TO A HITTER',spike:'DRAG · LET GO ON SMALL'}[act.type]):'';
   if(hint)txt(hint,W/2,DT+56*u,16*u,'#d62828','#fff',4*u);
   if(IN.tr&&IN.tr.length){var tn2=performance.now()/1000;while(IN.tr.length&&tn2-IN.tr[0].t>.35)IN.tr.shift();var tr=IN.tr;o.lineCap='round';
    for(var ti=1;ti<tr.length;ti++){var ag=1-(tn2-tr[ti].t)/.35,c0=scr({x:tr[ti-1].x,y:0,z:tr[ti-1].z}),c1=scr({x:tr[ti].x,y:0,z:tr[ti].z});o.strokeStyle='rgba(214,40,40,'+(.9*ag).toFixed(2)+')';o.lineWidth=(2+9*ag)*u;o.beginPath();o.moveTo(c0[0],c0[1]);o.lineTo(c1[0],c1[1]);o.stroke()}}
   var hw0=W*.42,hx0=W/2-hw0/2,hy0=DT+DH-26*u;txt('HYPE',hx0-6*u,hy0+9*u,13*u,'#111',null,0,'right');
   o.fillStyle='#fff';o.fillRect(hx0,hy0,hw0,11*u);o.fillStyle=M.hype>=100?(Math.sin(M.now*12)>0?'#d62828':'#111'):'#111';o.fillRect(hx0,hy0,hw0*M.hype/100,11*u);o.strokeStyle='#111';o.lineWidth=2*u;o.strokeRect(hx0,hy0,hw0,11*u);
-  if(svMode==='serve'&&window.svGreen)window.svGreen(!!(act&&green));
-  if(svMode==='serve'&&window.svRect){var sr=window.svRect(),hr=hud.getBoundingClientRect(),kx=hud.width/hr.width,scx=(sr.cx-hr.left)*kx,scy=(sr.cy-hr.top)*kx,srr=sr.r*kx;if(act){o.strokeStyle=k<w.good?'#d62828':k<w.perf?'#e8a33a':'#1f9d55';o.lineWidth=5*u;o.beginPath();o.arc(scx,scy,srr+lerp(18,3,k)*u,0,6.28);o.stroke()}}
-  if(act&&green&&SET.fx){var c3=scr(headW(act.actor));inkText('NOW!',c3[0],c3[1],24*u,'#1f9d55',-.06)}
+  if(act&&green&&SET.fx){var c3=scr(act.type==='spike'&&act.tgtW?{x:act.tgtW.x,y:.2,z:act.tgtW.z}:headW(act.actor));inkText('NOW!',c3[0],c3[1],24*u,'#1f9d55',-.06)}
 
   return}
  /* stick */
@@ -1556,14 +1564,14 @@ hud.addEventListener('pointerdown',function(e){var p=pt(e);e.preventDefault();ac
  else btn()});
 function move(e){if(IN.sw&&e.pointerId===IN.sw.id){swipeMove(swFloor(e));return}if(!IN.touch||e.pointerId!==IN.touch.id)return;var p=pt(e),r=44*p.w/300,dx=(p.px-IN.touch.ox)/r,dy=(p.py-IN.touch.oy)/r,m=Math.hypot(dx,dy);if(m>1){dx/=m;dy/=m}IN.tx=dx;IN.ty=dy}
 hud.addEventListener('pointermove',move);
-function up(e){if(IN.sw&&e.pointerId===IN.sw.id){swipeMove(swFloor(e));swipeEnd(e);return}if(IN.touch&&e.pointerId===IN.touch.id){IN.touch=null;IN.tx=IN.ty=0}if(IN.btn!=null&&e.pointerId===IN.btn){IN.btn=null;drillBtn(0)}}
-hud.addEventListener('pointerup',up);hud.addEventListener('pointercancel',up);
+function ptrUp(e){if(IN.sw&&e.pointerId===IN.sw.id){swipeMove(swFloor(e));swipeEnd(e);return}if(IN.touch&&e.pointerId===IN.touch.id){IN.touch=null;IN.tx=IN.ty=0}if(IN.btn!=null&&e.pointerId===IN.btn){IN.btn=null;drillBtn(0)}}
+hud.addEventListener('pointerup',ptrUp);hud.addEventListener('pointercancel',ptrUp);
 /* phones can lose the pointerup of a long hold (long-press handling, capture quirks): also watch window + touch events */
-addEventListener('pointerup',up);addEventListener('pointercancel',up);
+addEventListener('pointerup',ptrUp);addEventListener('pointercancel',ptrUp);
 function touchUp(e){var r=hud.getBoundingClientRect(),L=false,Rt=false;for(var i=0;i<e.touches.length;i++){var t=e.touches[i],x=(t.clientX-r.left)/r.width,y=(t.clientY-r.top)/r.height;if(y>GLH&&x<.6)L=true;if(x>=.5||y<=GLH)Rt=true}
  if(IN.touch&&!L){IN.touch=null;IN.tx=IN.ty=0}if(M.mode==='drill'&&IN.btn!=null&&!Rt){IN.btn=null;drillBtn(0)}}
 addEventListener('touchend',touchUp,{passive:true});addEventListener('touchcancel',touchUp,{passive:true});
-hud.addEventListener('contextmenu',function(e){e.preventDefault()});hud.addEventListener('lostpointercapture',up);
+hud.addEventListener('contextmenu',function(e){e.preventDefault()});hud.addEventListener('lostpointercapture',ptrUp);
 addEventListener('keydown',function(e){if(e.target&&/INPUT/.test(e.target.tagName))return;if(e.code==='Escape'||e.code==='KeyP'){togglePause();return}
  if(e.code==='Space'||e.code==='KeyJ'||e.code==='KeyK'||e.code==='Enter'){if(!e.repeat){if(M.mode==='drill'){IN.keyBtn=true;drillBtn(1)}else press()}e.preventDefault();return}IN.keys[e.code]=true;if(/Arrow/.test(e.code))e.preventDefault()});
 addEventListener('keyup',function(e){IN.keys[e.code]=false;if(M.mode==='drill'&&/Space|KeyJ|KeyK|Enter/.test(e.code)){IN.keyBtn=false;drillBtn(0)}});
@@ -1723,14 +1731,14 @@ document.querySelectorAll('[data-go="sMode"]').forEach(function(b){b.addEventLis
  function css(c){var r=hud.getBoundingClientRect(),k=r.width/hud.width;return [r.left+c[0]*k,r.top+c[1]*k]}
  function aimAt(cx,cy){var r=hud.getBoundingClientRect(),px=(cx-r.left)/r.width,py=(cy-r.top)/r.height,w=floorAt(px*2-1,-(2*Math.min(py,GLH-.002)/GLH-1));if(w&&w.z>1&&M.serveAim){M.serveAim.x=cl(w.x,-4.2,4.2);M.serveAim.z=cl(w.z,1.6,8.6)}}
  window.svRect=function(){var r=b.getBoundingClientRect();return {cx:r.left+r.width/2,cy:r.top+r.height/2,r:r.width/2}};
- window.setSv=function(m){if(m!==mode){mode=m;b.style.display=m?'flex':'none';b.classList.toggle('aim',m==='aim');b.classList.toggle('go',m==='serve');lab.textContent=m==='aim'?'AIM':m==='serve'?'SERVE':'';drag=null}
+ window.setSv=function(m){if(m!==mode){mode=m;b.style.display=m==='aim'?'flex':'none';b.classList.toggle('aim',m==='aim');lab.textContent=m==='aim'?'AIM':'';if(m!=='aim'){drag=null;M.svHold=0}}
   if(!m&&green){green=false;b.classList.remove('green')}};
  window.svGreen=function(g){if(g!==green){green=g;b.classList.toggle('green',g)}};
  b.addEventListener('pointerdown',function(e){e.stopPropagation();e.preventDefault();
-  if(mode==='aim'){try{b.setPointerCapture(e.pointerId)}catch(_){}var c=M.serveAim?css(scr({x:M.serveAim.x,y:0,z:M.serveAim.z})):[e.clientX,e.clientY-120];drag={id:e.pointerId,x0:e.clientX,y0:e.clientY,bx:c[0],by:c[1]};SFX.click()}
-  else if(mode==='serve'){swipeCommit(null)}});
+  if(mode==='aim'){try{b.setPointerCapture(e.pointerId)}catch(_){}var c=M.serveAim?css(scr({x:M.serveAim.x,y:0,z:M.serveAim.z})):[e.clientX,e.clientY-120];drag={id:e.pointerId,x0:e.clientX,y0:e.clientY,bx:c[0],by:c[1]};M.svHold=1;M.svT0=M.now;SFX.click()}
+});
  b.addEventListener('pointermove',function(e){if(!drag||e.pointerId!==drag.id)return;aimAt(drag.bx+(e.clientX-drag.x0)*1.1,drag.by+(e.clientY-drag.y0)*1.1)});
- function end(e){if(!drag||e.pointerId!==drag.id)return;drag=null;if(mode==='aim'&&!M.serveQ&&!M.pend.length){M.serveQ=1;vib(10);SFX.click()}}
+ function end(e){if(!drag||e.pointerId!==drag.id)return;drag=null;if(mode==='aim'&&!M.serveQ&&!M.pend.length){M.serveK=svK();M.svHold=0;M.serveQ=1;vib(10);SFX.click()}else M.svHold=0}
  b.addEventListener('pointerup',end);b.addEventListener('pointercancel',end)})();
 
 /* ===== src/career.js ===== */
