@@ -2,12 +2,12 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://tksn6wmx8rrw"
+uid="uid://dnp6anjc8xliq"
 valid=false
 
 [deps]
 
-source_file="res://palo-site/game/25/sfx/spike_power.ogg"
+source_file="res://vball/sfx/spike.ogg"
 
 [params]
 

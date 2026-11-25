@@ -2,12 +2,12 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://beraew0b4rd21"
+uid="uid://yrlu0oybylpi"
 valid=false
 
 [deps]
 
-source_file="res://palo-site/game/25/sfx/serve1.ogg"
+source_file="res://vball/sfx/net.ogg"
 
 [params]
 

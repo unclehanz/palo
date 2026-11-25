@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1v4v1dk1xqqg"
-path="res://.godot/imported/cover.jpg-725915e095a5a51f32caae9fab9c183d.ctex"
+uid="uid://d0op7f4clyvw5"
+path="res://.godot/imported/cover.jpg-dd773d41b78a04ce7304a9eadf016e0e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://palo-site/game/25/img/cover.jpg"
-dest_files=["res://.godot/imported/cover.jpg-725915e095a5a51f32caae9fab9c183d.ctex"]
+source_file="res://vball/img/cover.jpg"
+dest_files=["res://.godot/imported/cover.jpg-dd773d41b78a04ce7304a9eadf016e0e.ctex"]
 
 [params]
 

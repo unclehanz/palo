@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://b33b02wngehx7"
-path="res://.godot/imported/bangers.woff2-3ce402eeeef2999db896cc97c492faf4.fontdata"
+uid="uid://do614t6dpls7i"
+path="res://.godot/imported/bangers.woff2-bd03f971c3798d624f619dd46b6c6e33.fontdata"
 
 [deps]
 
-source_file="res://palo-site/game/25/lib/bangers.woff2"
-dest_files=["res://.godot/imported/bangers.woff2-3ce402eeeef2999db896cc97c492faf4.fontdata"]
+source_file="res://vball/lib/bangers.woff2"
+dest_files=["res://.godot/imported/bangers.woff2-bd03f971c3798d624f619dd46b6c6e33.fontdata"]
 
 [params]
 
