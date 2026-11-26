@@ -59,12 +59,9 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
 #classicOpts.hide{display:none!important}#classicOpts .btn{min-width:0;width:100%;font-size:24px;padding:6px 14px}#classicOpts .btn.main{font-size:26px}
 @keyframes drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 #classicBtn[aria-expanded="true"]{box-shadow:3px 3px 0 var(--red)}
-#sTitle{justify-content:flex-end;gap:10px;padding-top:0;overflow:hidden}
-#sTitle .coverArt{position:absolute;left:0;top:0;width:100%;height:62%;object-fit:cover;object-position:50% 18%;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);pointer-events:none}
-#sTitle>*:not(.coverArt){position:relative}
-#sTitle .logo{font-size:clamp(64px,22vw,104px);margin-bottom:-4px}
-#sTitle .tagline{margin:0 0 4px}
-#sTitle .btn{padding:7px 22px;font-size:24px}#sTitle .btn.main{font-size:30px}
+
+
+
 /* MyLiga creator */
 #crPanel{display:flex;flex-direction:column;gap:8px;height:100%}
 .crSec{display:flex;gap:6px}.crSec button{flex:1;font:400 19px Bangers,Impact;letter-spacing:.06em;background:#fff;color:#111;border:3px solid #111;border-radius:10px;padding:3px 0;cursor:pointer}
@@ -153,6 +150,140 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
 .unl{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 6px}.unl span{font:400 12px Bangers,Impact;letter-spacing:.05em;border:2px solid var(--ink);padding:1px 6px;background:var(--ink);color:#fff}.unl span.lk{background:#fff;color:#999;border-color:#bbb}
 .tpage[hidden]{display:none!important}
 .note{font-size:12px;color:#555;max-width:340px;margin:0}
+
+/* ===== HOME (new) ===== */
+#sTitle{justify-content:flex-start;padding:0;gap:0;overflow:hidden}
+#sTitle.noHero{background:var(--paper) radial-gradient(#000000 1.2px,transparent 1.6px) 0 0/10px 10px}
+
+#sTitle .coverArt{position:absolute;left:0;top:14%;width:100%;height:42%;display:flex;align-items:center;justify-content:center;pointer-events:none}#hmHero svg{height:100%;max-height:300px;width:auto;filter:drop-shadow(8px 8px 0 #d62828);transform:rotate(-4deg)}
+#sTitle.hero3d{background:transparent}#sTitle.hero3d .coverArt{display:none}
+.hmHead{position:absolute;left:16px;top:max(14px,env(safe-area-inset-top));text-align:left}
+.hmHead .logo{font-size:clamp(46px,15vw,66px);margin:0}.hmHead .tagline{font-size:15px;margin:6px 0 0 4px;letter-spacing:.14em}
+.hmIcons{position:absolute;right:14px;top:max(14px,env(safe-area-inset-top));display:flex;gap:10px;z-index:2}
+.ib{width:48px;height:48px;border:3px solid #111;background:#fff;box-shadow:3px 3px 0 #111;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;position:relative}
+.ib svg{width:25px;height:25px}.ib:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111}
+.ib i{position:absolute;right:-6px;top:-8px;background:var(--red);color:#fff;font:400 13px Bangers,Impact;font-style:normal;padding:0 5px;border:2px solid #111}
+.hmTag{position:absolute;left:50%;top:60%;transform:translateX(-50%) rotate(-2deg);display:flex;flex-direction:column;align-items:center;gap:5px;pointer-events:none;z-index:1}
+.hmTag b{background:#111;color:#fff;padding:3px 16px;font:400 26px Bangers,Impact;letter-spacing:.08em;font-style:italic;box-shadow:4px 4px 0 var(--red);white-space:nowrap}
+.hmTag span{font:400 15px Bangers,Impact;letter-spacing:.1em;background:#fff;border:3px solid #111;padding:0 12px}
+.hmBtm{position:absolute;left:0;right:0;bottom:0;height:34%;background:var(--paper) radial-gradient(#0000001a 1.2px,transparent 1.6px) 0 0/8px 8px;border-top:4px solid #111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px 22px max(10px,env(safe-area-inset-bottom))}
+.hmStart{width:100%;max-width:330px;min-width:0;font-size:46px!important;letter-spacing:.12em;padding:5px 12px!important;transform:skewX(-6deg)!important;box-shadow:7px 7px 0 var(--red)!important}
+.hmStart:active{transform:skewX(-6deg) translate(4px,4px)!important}
+.hmModes{display:flex;gap:6px}.hmModes button{font:400 15px Bangers,Impact;letter-spacing:.1em;border:3px solid #111;background:#fff;color:#111;padding:2px 12px;cursor:pointer}
+.hmModes button.on{background:#111;color:#fff;box-shadow:3px 3px 0 var(--red)}.hmModes button:disabled{opacity:.4}
+.hmLinks{display:flex;gap:8px;align-items:center;font:400 14px Bangers,Impact;letter-spacing:.08em}.hmLinks button{background:none;border:0;font:inherit;color:#444;text-decoration:underline;cursor:pointer;padding:0}
+#sTitle .foot{margin:0;font-size:12px}
+/* ===== LEAGUE ===== */
+.lgsw{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:6px 0 2px}.lgsw button{width:36px;height:36px;border-radius:50%;border:3px solid #111;cursor:pointer;padding:0}.lgsw button.on{outline:3px solid var(--red);outline-offset:2px}
+#lgRoot,#sqRoot,#shRoot{width:100%;max-width:372px;display:flex;flex-direction:column;gap:10px;padding-bottom:18px}
+.lgTop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.wallet{display:inline-flex;align-items:center;gap:6px;background:#111;color:#fff;border:3px solid #111;box-shadow:3px 3px 0 var(--red);padding:1px 12px;font:400 18px Bangers,Impact;letter-spacing:.06em}
+.wallet i{width:14px;height:14px;border-radius:3px;transform:rotate(12deg);background:#9fdcf5;border:2px solid #fff;display:inline-block}.wallet b{font-size:22px;color:#9fdcf5;font-weight:400}
+.lgHead{display:flex;align-items:center;gap:12px;background:#111;color:#fff;border:4px solid #111;box-shadow:6px 6px 0 var(--red);padding:8px 12px}
+.lgHead .ico{flex:0 0 78px;height:78px}.lgHead .ico svg{width:100%;height:100%}
+.lgHead .hc{display:flex;flex-direction:column;gap:1px;min-width:0}.lgHead .hc b{font:400 26px/1 Bangers,Impact;letter-spacing:.04em}.lgHead .hc small{font:500 12px/1.3 system-ui,sans-serif;opacity:.85}
+.lgHead .ovr b{font-size:30px!important;color:#e9c23a}
+.lgRib{display:flex;gap:0}.lgRib div{flex:1;text-align:center;font:400 17px Bangers,Impact;letter-spacing:.08em;border:3px solid #111;margin-left:-3px;padding:2px 0;background:#fff;color:#999}
+.lgRib div.done{background:#d9d6cf;color:#111}.lgRib div.on{background:#111;color:#fff;box-shadow:3px 3px 0 var(--red);position:relative;z-index:1}.lgRib div.win{background:var(--green);color:#fff}
+.lgNext{background:#fff;border:4px solid #111;box-shadow:6px 6px 0 #111;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.lgNext .lab{font:400 16px Bangers,Impact;letter-spacing:.1em;color:var(--red)}
+.vs{display:flex;align-items:center;gap:8px}.vs .tm{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;text-align:center}
+.vs .tm .ico{width:62px;height:62px}.vs .tm .ico svg{width:100%;height:100%}.vs .tm b{font:400 19px/1 Bangers,Impact;letter-spacing:.03em}.vs .tm small{font:500 11px system-ui,sans-serif;color:#555}
+.vs .x{font:400 34px Bangers,Impact;color:var(--red);font-style:italic}
+.hint{font:500 12px/1.35 system-ui,sans-serif;border-left:5px solid;padding:2px 0 2px 8px}
+.lgNext .btn,.lgMgr .btn{min-width:0;width:100%}.lgNext .btn.main{font-size:32px;padding:6px 10px}
+.lgTabs{display:flex}.lgTabs button{flex:1;font:400 16px Bangers,Impact;letter-spacing:.06em;border:3px solid #111;margin-left:-3px;background:#fff;padding:3px 0;cursor:pointer;color:#111}.lgTabs button.on{background:#111;color:#fff}
+.lgt{width:100%;border-collapse:collapse;background:#fff;border:3px solid #111;font:400 15px Bangers,Impact;letter-spacing:.03em}
+.lgt th{background:#111;color:#fff;padding:2px 4px;font-weight:400;text-align:center}.lgt th:nth-child(2){text-align:left}
+.lgt td{padding:3px 4px;text-align:center;border-top:2px solid #e3e0d8}.lgt td:nth-child(2){text-align:left}
+.lgt tr.me td{background:#ffe9a8}.lgt tr.q td:first-child{box-shadow:inset 5px 0 0 var(--green)}
+.lgsub{font:400 16px Bangers,Impact;letter-spacing:.08em;margin:6px 0 2px}
+.brk{display:flex;flex-direction:column;gap:8px}.brk .m{background:#fff;border:3px solid #111;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;font:400 17px Bangers,Impact;letter-spacing:.03em}
+.brk .m.me{background:#ffe9a8}.brk .m b{flex:1}.brk .m b:last-of-type{text-align:right}.brk .m i{font-style:normal;background:#111;color:#fff;padding:0 8px}.brk .m .w{color:var(--green)}
+.hist{display:flex;flex-direction:column;gap:4px}.hist div{display:flex;justify-content:space-between;background:#fff;border:2px solid #111;padding:3px 8px;font:400 15px Bangers,Impact;letter-spacing:.03em}.hist .w{color:var(--green)}.hist .l{color:var(--red)}
+.lgMgr{display:grid;grid-template-columns:1fr 1fr;gap:8px}.lgMgr .btn{font-size:20px;padding:6px 6px;transform:none;box-shadow:4px 4px 0 #111;border-width:3px}.lgMgr .btn small{font-size:11px}
+.lgMgr .btn.wide{grid-column:1/-1}
+#lgModal{position:fixed;inset:0;z-index:30;background:rgba(17,17,17,.6);display:flex;align-items:center;justify-content:center;padding:20px}#lgModal[hidden]{display:none}
+#lgModal .box{background:#fff;border:5px solid #111;box-shadow:9px 9px 0 var(--red);padding:18px 16px;max-width:330px;width:100%;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+#lgModal .box h3{font:400 46px/.95 Bangers,Impact;letter-spacing:.03em;margin:0;transform:rotate(-3deg)}#lgModal .box p{font:500 14px/1.4 system-ui,sans-serif;margin:0;color:#222}
+#lgModal .box .btn{min-width:0;width:100%;font-size:24px}
+#lgBusy{position:fixed;inset:0;z-index:40;background:rgba(243,241,236,.92);display:flex;align-items:center;justify-content:center;font:400 28px Bangers,Impact;letter-spacing:.06em}#lgBusy[hidden]{display:none}
+.lgrw{background:#fff;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:6px 12px;width:100%;max-width:340px;display:flex;flex-direction:column;gap:1px;text-align:left}
+.lgrw b{font:400 20px Bangers,Impact;letter-spacing:.08em;color:var(--red)}.lgrw div{display:flex;justify-content:space-between;font:400 16px Bangers,Impact;letter-spacing:.04em}.lgrw i{font-style:normal;color:#1f9d55}
+.lgrw .tot{border-top:3px solid #111;margin-top:3px;padding-top:3px;font-size:20px}
+.lgev{font:400 26px Bangers,Impact;letter-spacing:.06em;padding:2px 14px;border:3px solid #111;transform:rotate(-2deg)}.lgev.good{background:#1f9d55;color:#fff}.lgev.bad{background:var(--red);color:#fff}
+#oLg{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+/* squad + shop cards */
+.slot,.mc{display:flex;flex-direction:column;gap:3px;background:#fff;color:#111;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:7px 10px;text-align:left;cursor:pointer;font:inherit;position:relative;width:100%}
+.slot.on,.mc.on{outline:3px solid var(--red);outline-offset:-7px}
+.slot .top,.mc .top{display:flex;align-items:center;gap:8px}.slot .pos,.mc .pos{font:400 15px Bangers,Impact;background:#111;color:#fff;padding:0 7px;letter-spacing:.06em}
+.slot .nm,.mc .nm{font:400 22px/1 Bangers,Impact;letter-spacing:.04em;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot .ov,.mc .ov{font:400 26px/1 Bangers,Impact;color:var(--red)}.slot .ov small,.mc .ov small{font:400 11px Bangers;color:#777;display:block;line-height:1;text-align:right}
+.chips{display:flex;flex-wrap:wrap;gap:4px}.chips span{font:400 13px Bangers,Impact;letter-spacing:.05em;border:2px solid #111;padding:0 6px;background:#f4f1ea}.chips span.hi{background:#111;color:#fff}.chips span.tag{background:var(--red);color:#fff;border-color:#111}
+.you{font:400 12px Bangers;background:var(--red);color:#fff;padding:0 6px;letter-spacing:.08em}
+.sqtabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}.sqtabs .chip{flex:none}
+.trRow{display:grid;grid-template-columns:62px 1fr 34px auto;align-items:center;gap:6px;padding:3px 0;border-bottom:2px solid #eee}.trRow .n{font:400 16px Bangers,Impact;letter-spacing:.05em;text-align:right}
+.trRow .v{font:400 18px Bangers,Impact;text-align:center}.sm{font:400 15px Bangers,Impact;letter-spacing:.04em;border:3px solid #111;background:#fff;padding:1px 8px;cursor:pointer;color:#111;box-shadow:2px 2px 0 #111;white-space:nowrap}
+.sm:disabled{opacity:.35;box-shadow:none;cursor:default}.sm.buy{background:#111;color:#fff;box-shadow:2px 2px 0 var(--red)}
+.svc{display:grid;grid-template-columns:1fr auto;gap:0 8px;text-align:left;background:#fff;color:#111;border:3px solid #111;padding:4px 8px;cursor:pointer;font:inherit}
+.svc b{font:400 18px Bangers,Impact;letter-spacing:.05em}.svc small{grid-column:1;font:500 11px system-ui,sans-serif;color:#555}.svc i{grid-row:1/3;grid-column:2;align-self:center;font:400 15px Bangers,Impact;font-style:normal;letter-spacing:.06em}
+.svc.on{background:#111;color:#fff;box-shadow:3px 3px 0 var(--red)}.svc.on small{color:#ccc}.svc.lock{opacity:.45;cursor:default}
+.facc{background:#fff;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.facc .t{display:flex;align-items:center;gap:8px;font:400 22px Bangers,Impact;letter-spacing:.04em}.facc .t span{font-size:24px}
+.facc p{margin:0;font:500 12px/1.35 system-ui,sans-serif;color:#333}.pips{display:flex;gap:4px}.pips i{width:26px;height:10px;border:2px solid #111;background:#fff}.pips i.f{background:var(--red)}
+
+/* ===== TUTORIAL ===== */
+#sTut{padding-top:max(14px,env(safe-area-inset-top))}
+.tutTop{width:100%;max-width:372px;display:flex;justify-content:space-between;align-items:center;font:400 18px Bangers,Impact;letter-spacing:.1em}
+#tutBody{width:100%;max-width:372px;flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:2px 2px 6px}
+#tutBody h2{margin:0;font:400 38px/.95 Bangers,Impact;letter-spacing:.03em;transform:rotate(-1.5deg)}
+#tutBody h2 span{color:var(--red)}
+#tutBody p{margin:0;font:500 14px/1.4 system-ui,sans-serif}
+.tcard{background:#fff;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:8px 10px;display:flex;flex-direction:column;gap:5px}
+.tcard b.k{font:400 20px Bangers,Impact;letter-spacing:.06em}
+.zbar{display:flex;height:34px;border:3px solid #111;position:relative;background:#fff}
+.zbar i{display:flex;align-items:center;justify-content:center;font:400 13px Bangers,Impact;font-style:normal;color:#fff;letter-spacing:.05em}
+.zbar .z1{width:28%;background:#d62828}.zbar .z2{width:27%;background:#c9772a}.zbar .z3{width:25%;background:#e8a33a;color:#111}.zbar .z4{width:20%;background:#1f9d55}
+.zbar .mk{position:absolute;top:-6px;bottom:-6px;width:4px;background:#111;left:0;transform:translateX(-2px)}
+.zbar .mk.u{background:#fff;outline:3px solid #111}
+.zlab{display:flex;justify-content:space-between;font:400 12px Bangers,Impact;letter-spacing:.05em;color:#444}
+.ringBox{position:relative;height:190px;display:flex;align-items:center;justify-content:center;background:#e8e6df;border:3px solid #111;overflow:hidden}
+.ringBox .ball{position:absolute;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid #111;box-shadow:0 0 0 3px rgba(17,17,17,.2)}
+.ringBox .rg{position:absolute;border-radius:50%;border:7px solid #d62828;width:150px;height:150px;transform:scale(1)}
+.ringBox .res{position:absolute;top:8px;left:0;right:0;text-align:center;font:400 30px Bangers,Impact;letter-spacing:.05em;color:#111;-webkit-text-stroke:1px #fff}
+.tapBtn{font:400 34px Bangers,Impact;letter-spacing:.1em;background:#111;color:#fff;border:0;border-bottom:6px solid var(--red);padding:8px;cursor:pointer;touch-action:manipulation;user-select:none;width:100%}
+.tapBtn:active{transform:translateY(3px);border-bottom-width:3px}
+.tri{display:grid;grid-template-columns:1fr 24px 1fr;align-items:center;gap:4px;font:400 17px Bangers,Impact;letter-spacing:.04em;text-align:center}
+.tri span{border:3px solid #111;padding:2px 4px;background:#fff}.tri em{font-style:normal;color:var(--red);font-size:20px}
+.tri .a{background:#111;color:#fff}.tri .b{background:#fff}
+
+#scPop{position:absolute;left:50%;top:9%;transform:translateX(-50%);z-index:7;pointer-events:none;display:flex;align-items:stretch;background:#fff;border:4px solid #111;box-shadow:7px 7px 0 var(--red);min-width:250px;max-width:92%;animation:scIn .28s cubic-bezier(.2,1.4,.4,1)}
+
+#cutIn{position:absolute;left:0;right:0;top:30%;height:132px;z-index:8;pointer-events:none;display:flex;align-items:center;gap:14px;padding:0 5%;background:linear-gradient(100deg,#111 0 62%,var(--red) 62%);border-top:5px solid #fff;border-bottom:5px solid #fff;transform:skewY(-4deg);animation:ciIn 1.25s ease both;overflow:hidden}
+#cutIn[hidden]{display:none}#cutIn.theirs{background:linear-gradient(100deg,#111 0 62%,#444 62%)}
+#cutIn .ciL{position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 80% 50%,rgba(255,255,255,.16) 0 2deg,transparent 2deg 9deg);animation:ciSp .5s linear infinite}
+#cutIn .ciN{position:relative;font:400 84px/1 Bangers,Impact;color:#fff;font-style:italic;text-shadow:5px 5px 0 var(--red)}
+#cutIn .ciT{position:relative;display:flex;flex-direction:column;color:#fff;transform:skewY(4deg)}
+#cutIn small{font:400 20px Bangers,Impact;letter-spacing:.1em;color:#f4f1ea}#cutIn b{font:400 44px/1 Bangers,Impact;letter-spacing:.04em;text-shadow:4px 4px 0 #111;color:#ffe14a}#cutIn em{font:italic 500 13px system-ui,sans-serif;color:#ddd}
+@keyframes ciIn{0%{transform:translateX(-100%) skewY(-4deg)}12%{transform:translateX(0) skewY(-4deg)}85%{transform:translateX(0) skewY(-4deg);opacity:1}100%{transform:translateX(30%) skewY(-4deg);opacity:0}}
+@keyframes ciSp{to{transform:rotate(3deg)}}
+#cmt{position:absolute;left:50%;bottom:21%;transform:translateX(-50%);z-index:6;pointer-events:none;background:#fff;color:#111;border:3px solid #111;box-shadow:5px 5px 0 #111;padding:5px 14px;font:400 19px Bangers,Impact;letter-spacing:.04em;max-width:86%;text-align:center;animation:cmIn .25s cubic-bezier(.2,1.4,.4,1)}
+#cmt[hidden]{display:none}@keyframes cmIn{from{transform:translateX(-50%) scale(.6);opacity:0}}
+#rpl{position:absolute;left:8px;top:12%;z-index:6;pointer-events:none;width:96px;height:152px;border:4px solid #111;box-shadow:5px 5px 0 var(--red);background:#f4f1ea}#rpl[hidden]{display:none}
+#sLeague .bub{position:relative;margin:10px 0 4px;background:#fff;border:3px solid #111;border-radius:14px;padding:6px 12px;font:italic 600 14px system-ui,sans-serif;box-shadow:4px 4px 0 #111;text-align:left}
+#sLeague .bub small{display:block;font:400 12px Bangers,Impact;letter-spacing:.08em;color:#d62828;font-style:normal}#sLeague .bub.rv{background:#111;color:#fff;box-shadow:4px 4px 0 var(--red)}#sLeague .bub.rv small{color:#ffe14a}
+#sLeague .bub:after{content:'';position:absolute;left:34px;bottom:-12px;border:6px solid transparent;border-top:8px solid #111}
+#sLeague .scout{margin:10px 0 6px;border:3px dashed #111;padding:5px 8px;display:flex;flex-direction:column;gap:2px;font:600 12px system-ui,sans-serif;text-align:left}#sLeague .scout b{font:400 15px Bangers,Impact;letter-spacing:.08em}#sLeague .scout i{font-style:normal;color:#d62828;font-weight:800}
+#sLeague .shelf{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}#sLeague .shelf>div{border:3px solid #111;background:#fff;padding:3px 8px;display:flex;flex-direction:column;font:400 14px Bangers,Impact;box-shadow:3px 3px 0 #111}#sLeague .shelf .tr{background:#ffe14a}#sLeague .shelf small{font:500 10px system-ui,sans-serif}
+.chipRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:center}.chipRow button{font:400 14px Bangers,Impact;letter-spacing:.05em;border:3px solid #111;background:#fff;padding:2px 10px}.chipRow button.on{background:#111;color:#fff}
+#scPop[hidden]{display:none}#scPop.theirs{box-shadow:7px 7px 0 #111}
+@keyframes scIn{from{transform:translateX(-50%) scale(.55) rotate(-6deg);opacity:0}to{transform:translateX(-50%) scale(1) rotate(-1.5deg);opacity:1}}
+#scPop .spN{background:#111;color:#fff;font:400 54px/1 Bangers,Impact;padding:4px 12px;display:flex;align-items:center;font-style:italic;min-width:70px;justify-content:center}
+#scPop.mine .spN{background:var(--red)}
+#scPop .spT{padding:5px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+#scPop .spT b{font:400 26px/1 Bangers,Impact;letter-spacing:.04em}#scPop .spT small{font:500 11px system-ui,sans-serif;color:#444}
+#scPop .spS{display:flex;gap:8px;font:400 14px Bangers,Impact;letter-spacing:.05em;flex-wrap:wrap}#scPop .spS b{color:var(--red);font-weight:400;font-size:16px}
+#scPop .spR{display:flex;gap:4px;flex-wrap:wrap}#scPop .spR i{font:400 11px Bangers,Impact;font-style:normal;border:2px solid #111;padding:0 5px;background:#f4f1ea}
 </style>
 </head>
 <body>
@@ -162,18 +293,29 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
  <div id="plays"></div>
  <div id="svk"></div>
  <button id="sv" aria-label="Aim and serve"><span></span></button>
+ <div id="scPop" hidden></div><div id="cutIn" hidden></div><div id="cmt" hidden></div><canvas id="rpl" width="240" height="380" hidden></canvas>
  <button id="pauseBtn" aria-label="Pause">II</button>
 
- <section class="scr" id="sTitle">
-  <img class="coverArt" src="img/cover.jpg" alt="Jolo, Hanz and Paolo of Brgy. Mapayapa">
-  <h1 class="logo">PALO<span>!</span></h1>
-  <p class="tagline">PINOY BALIBOL</p>
-  <button class="btn main" data-go="sMode">Play</button>
-  <button class="btn" data-go="sHow">How to play</button>
-  <button class="btn" data-go="sSet">Settings</button>
-  <div class="foot">Developed by Hanz Rodil</div>
-  <div class="foot" id="verLine" style="margin-top:0;font-size:12px"></div>
-  <div class="note hide" id="updNote" style="background:#fff;border:3px solid #111;padding:6px 10px;font-size:13px"></div>
+<section class="scr" id="sTitle">
+  <div class="coverArt" id="hmHero"></div>
+  <div class="hmHead"><h1 class="logo">PALO<span>!</span></h1><p class="tagline">PINOY BALIBOL</p></div>
+  <div class="hmIcons"><button class="ib" id="hmShop" aria-label="Shop"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h3l2.4 11h9.6l2-8H7"/><circle cx="10" cy="19.5" r="1.4" fill="#111"/><circle cx="17" cy="19.5" r="1.4" fill="#111"/></svg><i id="hmCoin" hidden></i></button>
+   <button class="ib" data-go="sSet" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg></button></div>
+  <div class="hmTag" id="hmTag" hidden></div>
+  <div class="hmBtm">
+   <button class="btn main hmStart" id="hmStart">START</button>
+   <div class="hmModes" id="hmModes"><button data-hm="liga" class="on">MY LIGA</button><button data-hm="classic">CLASSIC</button><button data-hm="streets" disabled>STREETS</button></div>
+   <div class="hmLinks"><button id="hmTut">Tutorial</button><span>·</span><button data-go="sHow">How to play</button><span>·</span><button data-go="sMode">All modes</button></div>
+   <div class="foot">Developed by Hanz Rodil</div>
+   <div class="foot" id="verLine" style="margin-top:0;font-size:12px"></div>
+   <div class="note hide" id="updNote" style="background:#fff;border:3px solid #111;padding:6px 10px;font-size:13px"></div>
+  </div>
+ </section>
+
+ <section class="scr hide" id="sTut" style="justify-content:flex-start;gap:8px">
+  <div class="tutTop"><span id="tutPg"></span><button class="sm" id="tutSkip">SKIP</button></div>
+  <div id="tutBody"></div>
+  <div class="mlbar"><button class="btn" id="tutPrev">‹</button><button class="btn main" id="tutNext">Next ›</button></div>
  </section>
 
  <section class="scr hide" id="sMode">
@@ -190,13 +332,13 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
 
  <section class="scr hide" id="sWelcome">
   <h1 class="logo" style="font-size:72px">PALO<span>!</span></h1>
-  <p class="tagline">Welcome, player!</p>
+  <p class="tagline">Create your player</p>
   <div class="ico big" id="jerseyPrev"></div>
   <div class="panel">
    <label class="wfld"><span>What's your name?</span><input id="wName" maxlength="10" autocomplete="off" placeholder="e.g. Hanz"></label>
    <label class="wfld"><span>Jersey number</span><input id="wNum" type="number" min="0" max="99" inputmode="numeric" placeholder="7"></label>
   </div>
-  <button class="btn main" id="wGo">Let's play!</button>
+  <button class="btn main" id="wGo">Next: look ›</button>
  </section>
 
 
@@ -222,6 +364,8 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
    <div class="srow">Controls <div class="seg" data-set="ctl"><button data-v="swipe">Swipe</button><button data-v="classic">Classic</button></div></div>
    <div class="srow">Camera <div class="seg" data-set="cam"><button data-v="std">Standard</button><button data-v="corner">Corner</button></div></div>
    <div class="srow">Difficulty <div class="seg" data-set="diff"><button data-v="0">Easy</button><button data-v="1">Normal</button><button data-v="2">Hard</button></div></div>
+   <div class="srow">Timing rings <div class="seg" data-set="cb"><button data-v="0">Red · Green</button><button data-v="1">Grey · Blue</button></div></div>
+   <div class="srow">Timing offset <div class="seg" data-set="cal"><button data-v="-100">-100</button><button data-v="-50">-50</button><button data-v="0">0</button><button data-v="50">+50</button><button data-v="100">+100</button></div></div>
    <div class="srow">Sound <div class="seg" data-set="sound"><button data-v="1">On</button><button data-v="0">Off</button></div></div>
    <div class="srow">Vibration <div class="seg" data-set="vib"><button data-v="1">On</button><button data-v="0">Off</button></div></div>
    <h3>Graphics</h3>
@@ -233,7 +377,7 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
    <div class="srow">Player details <div class="seg" data-set="detail"><button data-v="2">Full</button><button data-v="1">Near</button><button data-v="0">Off</button></div></div>
    <div class="srow">Effects <div class="seg" data-set="fx"><button data-v="1">On</button><button data-v="0">Reduced</button></div></div>
   </div>
-  <p class="note">Auto measures your frame rate for a few seconds at the start of a match and picks Low, Medium or High. Player details = faces, ponytails and head tracking (Near = your team only). 30 fps saves battery.</p>
+  <p class="note">Timing offset in ms: if you keep tapping late (slow screen or Bluetooth speaker), try a positive number; if you keep tapping early, a negative one. Auto measures your frame rate for a few seconds at the start of a match and picks Low, Medium or High. Player details = faces, ponytails and head tracking (Near = your team only). 30 fps saves battery.</p>
   <button class="btn" id="camTuneBtn">Tune camera</button>
   <button class="btn" data-go="sTitle">Back</button>
  </section>
@@ -281,7 +425,7 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
 
  <section class="scr hide mlscr" id="sBrgy">
   <h2>Pick your barangay</h2>
-  <p class="sub2"><b id="brgyPos"></b><br>Each barangay plays its own way. A weaker team means more minutes for you and more Pawis to grow.</p>
+  <p class="sub2"><b id="brgyPos"></b><br>Each barangay plays its own way. A weaker team means more minutes for you and more Ice Tubig to grow.</p>
   <div class="plist" id="brgyList"></div>
   <div class="mlbar"><button class="btn" data-go="sPos">‹ Position</button><button class="btn main" id="brgyGo" disabled>Sign up!</button></div>
  </section>
@@ -302,7 +446,22 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
   <button class="btn" data-go="sMode" style="min-width:0">‹ Modes</button>
  </section>
 
- <section class="scr clear hide" id="sPause">
+<section class="scr hide mlscr" id="sLgName">
+  <h2>Name your team</h2>
+  <p class="sub2">A default squad is waiting around you. You lead them through every league, and you can hire new players later.</p>
+  <div class="ico big" id="lgnJersey"></div>
+  <div class="panel"><label class="wfld"><span>Team name</span><input id="lgnName" maxlength="18" autocomplete="off" placeholder="Brgy. Mapayapa"></label>
+   <div class="lgsw" id="lgnCols"></div><div class="chipRow" id="lgnPat"></div><div class="chipRow" id="lgnCrest"></div></div>
+  <div class="mlbar"><button class="btn" id="lgnBack">‹ Back</button><button class="btn main" id="lgnGo">Start season!</button></div>
+ </section>
+
+ <section class="scr hide mlscr" id="sLeague"><div id="lgRoot"></div>
+  <div id="lgModal" hidden></div></section>
+ <section class="scr hide mlscr" id="sSquad"><div id="sqRoot"></div></section>
+ <section class="scr hide mlscr" id="sShop"><div id="shRoot"></div></section>
+ <div id="lgBusy" hidden><span>Getting the teams ready…</span></div>
+
+  <section class="scr clear hide" id="sPause">
   <h2>Paused</h2>
   <button class="btn main" data-act="resume">Resume</button>
   <button class="btn" data-act="timeout" id="toBtn">Timeout</button>
@@ -314,8 +473,10 @@ h2{font:400 44px Bangers,Impact;margin:0;letter-spacing:.04em}
   <p class="big" id="oTitle">YOU WIN!</p>
   <p class="tagline" id="oScore">15 - 12</p>
   <div class="stats" id="oStats"></div>
-  <button class="btn main" data-act="restart">Rematch</button>
-  <button class="btn" data-act="quit">Title</button>
+  <div id="oLg" hidden></div>
+  <button class="btn main" id="oCont" hidden>Continue</button>
+  <button class="btn main" data-act="restart" id="oRe">Rematch</button>
+  <button class="btn" data-act="quit" id="oQuit">Title</button>
   <div class="foot">PALO! · Developed by Hanz Rodil</div>
  </section>
 </div>
